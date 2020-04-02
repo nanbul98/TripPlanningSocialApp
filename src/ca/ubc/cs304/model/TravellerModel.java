@@ -1,6 +1,6 @@
 package ca.ubc.cs304.model;
 
-public class TravellerModel {
+public class TravellerModel implements UserModel {
     private final String username;
     private final String name;
     private final String country;
@@ -36,3 +36,4 @@ public class TravellerModel {
         return gender;
     };
 }
+
