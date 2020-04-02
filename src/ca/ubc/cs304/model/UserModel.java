@@ -1,10 +1,10 @@
 package ca.ubc.cs304.model;
 
-public interface UserModel {
-    String getUsername();
-    String getName();
-    String getCountry();
-    String getCity();
-    String getProvince();
+public abstract class UserModel {
+    public abstract String getUsername();
+    public abstract String getName();
+    public abstract String getCountry();
+    public abstract String getCity();
+    public abstract String getProvince();
 }
 

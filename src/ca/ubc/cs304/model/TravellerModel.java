@@ -1,6 +1,6 @@
 package ca.ubc.cs304.model;
 
-public class TravellerModel implements UserModel {
+public class TravellerModel extends UserModel {
     private final String username;
     private final String name;
     private final String country;
