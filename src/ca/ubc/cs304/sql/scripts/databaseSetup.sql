@@ -335,6 +335,7 @@ create table trav_grp_trp_trav_post_traveller_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
+    Body            varchar(250 char),
     Time_Commented  timestamp,
     Author_Username char(30),
     primary key (Post_ID, Comment_ID),
@@ -348,6 +349,7 @@ create table bus_grp_trp_trav_post_traveller_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
+    Body            varchar(250 char),
     Time_Commented  timestamp,
     Author_Username char(30),
     primary key (Post_ID, Comment_ID),
@@ -361,6 +363,7 @@ create table trav_grp_trp_trav_post_business_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
+    Body            varchar(250 char),
     Time_Commented  timestamp,
     Author_Username char(30),
     primary key (Post_ID, Comment_ID),
@@ -374,6 +377,7 @@ create table bus_grp_trp_trav_post_business_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
+    Body            varchar(250 char),
     Time_Commented  timestamp,
     Author_Username char(30),
     primary key (Post_ID, Comment_ID),
@@ -387,6 +391,7 @@ create table trav_grp_trp_bus_post_traveller_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
+    Body            varchar(250 char),
     Time_Commented  timestamp,
     Author_Username char(30),
     primary key (Post_ID, Comment_ID),
@@ -400,6 +405,7 @@ create table bus_grp_trp_bus_post_traveller_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
+    Body            varchar(250 char),
     Time_Commented  timestamp,
     Author_Username char(30),
     primary key (Post_ID, Comment_ID),
@@ -413,6 +419,7 @@ create table trav_grp_trp_bus_post_business_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
+    Body            varchar(250 char),
     Time_Commented  timestamp,
     Author_Username char(30),
     primary key (Post_ID, Comment_ID),
@@ -426,6 +433,7 @@ create table bus_grp_trp_bus_post_business_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
+    Body            varchar(250 char),
     Time_Commented  timestamp,
     Author_Username char(30),
     primary key (Post_ID, Comment_ID),
