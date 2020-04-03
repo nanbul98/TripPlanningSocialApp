@@ -1,5 +1,7 @@
 package ca.ubc.cs304.model;
 
+import java.time.LocalDate;
+
 public class TravellerModel extends UserModel {
     private final String username;
     private final String name;
@@ -7,14 +9,16 @@ public class TravellerModel extends UserModel {
     private final String province;
     private final String city;
     private final String gender;
+    private final LocalDate dob;
 
-    public TravellerModel(String username, String name, String country, String province, String city, String gender) {
+    public TravellerModel(String username, String name, String country, String province, String city, String gender, LocalDate dob) {
         this.username = username;
         this.name = name;
         this.country = country;
         this.province = province;
         this.city = city;
         this.gender = gender;
+        this.dob = dob;
     }
 
     public String getUsername() {
@@ -35,5 +39,6 @@ public class TravellerModel extends UserModel {
     public String getGender() {
         return gender;
     };
+    public LocalDate getDOB() { return  dob; };
 }
 
