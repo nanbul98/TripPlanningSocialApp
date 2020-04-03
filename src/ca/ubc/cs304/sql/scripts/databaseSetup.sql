@@ -6,7 +6,7 @@ create table supported_currency
 
 create table country_display_currency
 (
-    Country  char(50),
+    Country  char(35),
     Currency char(3),
     primary key (Country),
     foreign key (Currency) references supported_currency (Code)
@@ -15,12 +15,12 @@ create table country_display_currency
 
 create table traveller
 (
-    Username  char(50),
-    Name      char(50),
-    Country   char(50),
-    Province  char(50),
-    City      char(50),
-    Gender    char(15),
+    Username  char(15),
+    Name      char(35),
+    Country   char(35),
+    Province  char(35),
+    City      char(35),
+    Gender    char(5),
     Birthdate date,
     primary key (Username),
     foreign key (Country) references country_display_currency
@@ -29,11 +29,11 @@ create table traveller
 
 create table business
 (
-    Username char(50),
-    Name     char(50),
-    Country  char(50),
-    Province char(50),
-    City     char(50),
+    Username char(15),
+    Name     char(35),
+    Country  char(35),
+    Province char(35),
+    City     char(35),
     primary key (Username),
     foreign key (Country) references country_display_currency
         on delete set null
@@ -41,8 +41,8 @@ create table business
 
 create table traveller_bucket_lists
 (
-    Username char(50),
-    Title    char(50),
+    Username char(15),
+    Title    char(35),
     primary key (Username, Title),
     foreign key (Username) references traveller
         on delete cascade
@@ -50,16 +50,16 @@ create table traveller_bucket_lists
 
 create table interest
 (
-    Name        char(50),
-    Description varchar(250 char),
+    Name        char(35),
+    Description varchar(150 char),
     primary key (Name)
 );
 
 create table bucket_list_interests
 (
-    Username          char(50),
-    Bucket_List_Title char(50),
-    Interest_Name     char(50),
+    Username          char(15),
+    Bucket_List_Title char(35),
+    Interest_Name     char(35),
     primary key (Username, Bucket_List_Title, Interest_Name),
     foreign key (Username, Bucket_List_Title) references traveller_bucket_lists (Username, Title)
         on delete cascade,
@@ -70,9 +70,9 @@ create table bucket_list_interests
 create table traveller_group
 (
     Group_ID       integer,
-    Title          char(50),
-    Description    varchar(250 char),
-    Owner_Username char(50),
+    Title          char(35),
+    Description    varchar(150 char),
+    Owner_Username char(15),
     primary key (Group_ID),
     foreign key (Owner_Username) references traveller (Username)
         on delete cascade
@@ -81,9 +81,9 @@ create table traveller_group
 create table business_group
 (
     Group_ID       integer,
-    Title          char(50),
-    Description    varchar(250 char),
-    Owner_Username char(50),
+    Title          char(35),
+    Description    varchar(150 char),
+    Owner_Username char(15),
     primary key (Group_ID),
     foreign key (Owner_Username) references business (Username)
         on delete cascade
@@ -92,7 +92,7 @@ create table business_group
 create table trav_group_member_travellers
 (
     Group_ID integer,
-    Username char(50),
+    Username char(15),
     primary key (Group_ID, Username),
     foreign key (Group_ID) references traveller_group
         on delete cascade,
@@ -103,7 +103,7 @@ create table trav_group_member_travellers
 create table bus_group_member_travellers
 (
     Group_ID integer,
-    Username char(50),
+    Username char(15),
     primary key (Group_ID, Username),
     foreign key (Group_ID) references business_group
         on delete cascade,
@@ -114,7 +114,7 @@ create table bus_group_member_travellers
 create table trav_group_member_businesses
 (
     Group_ID integer,
-    Username char(50),
+    Username char(15),
     primary key (Group_ID, Username),
     foreign key (Group_ID) references traveller_group
         on delete cascade,
@@ -125,7 +125,7 @@ create table trav_group_member_businesses
 create table bus_group_member_businesses
 (
     Group_ID integer,
-    Username char(50),
+    Username char(15),
     primary key (Group_ID, Username),
     foreign key (Group_ID) references business_group
         on delete cascade,
@@ -136,7 +136,7 @@ create table bus_group_member_businesses
 create table trav_group_interests
 (
     Group_ID      integer,
-    Interest_Name char(50),
+    Interest_Name char(35),
     primary key (Group_ID, Interest_Name),
     foreign key (Group_ID) references traveller_group
         on delete cascade,
@@ -147,7 +147,7 @@ create table trav_group_interests
 create table bus_group_interests
 (
     Group_ID      integer,
-    Interest_Name char(50),
+    Interest_Name char(35),
     primary key (Group_ID, Interest_Name),
     foreign key (Group_ID) references business_group
         on delete cascade,
@@ -159,12 +159,12 @@ create table trav_grp_trip
 (
     Trip_ID          integer,
     Group_ID         integer not null,
-    Meeting_Location varchar(250 char),
-    Title            char(50),
+    Meeting_Location varchar(150 char),
+    Title            char(35),
     Group_Limit      integer,
     Trip_Cost        number,
     Currency         char(3) not null,
-    Description      varchar(250 char),
+    Description      varchar(150 char),
     Start_Date       date,
     End_Date         date,
     primary key (Trip_ID),
@@ -177,12 +177,12 @@ create table bus_grp_trip
 (
     Trip_ID          integer,
     Group_ID         integer not null,
-    Meeting_Location varchar(250 char),
-    Title            char(50),
+    Meeting_Location varchar(150 char),
+    Title            char(35),
     Group_Limit      integer,
     Trip_Cost        number,
     Currency         char(3) not null,
-    Description      varchar(250 char),
+    Description      varchar(150 char),
     Start_Date       date,
     End_Date         date,
     primary key (Trip_ID),
@@ -195,10 +195,10 @@ create table trav_grp_trp_activity
 (
     Activity_ID      integer,
     Trip_ID          integer not null,
-    Meeting_Location varchar(250 char),
-    Title            char(50),
+    Meeting_Location varchar(150 char),
+    Title            char(35),
     Activity_Cost    number,
-    Description      varchar(250 char),
+    Description      varchar(150 char),
     Start_Date       date,
     End_Date         date,
     primary key (Activity_ID),
@@ -210,10 +210,10 @@ create table bus_grp_trp_activity
 (
     Activity_ID      integer,
     Trip_ID          integer not null,
-    Meeting_Location varchar(250 char),
-    Title            char(50),
+    Meeting_Location varchar(150 char),
+    Title            char(35),
     Activity_Cost    number,
-    Description      varchar(250 char),
+    Description      varchar(150 char),
     Start_Date       date,
     End_Date         date,
     primary key (Activity_ID),
@@ -224,10 +224,10 @@ create table bus_grp_trp_activity
 create table trav_group_sponsored_deals
 (
     Promo_Code        char(100),
-    Business_Username char(50) not null,
+    Business_Username char(15)        not null,
     Group_ID          integer not null,
-    Condition         varchar(250 char),
-    Deal              varchar(250 char),
+    Condition         varchar(150 char),
+    Deal              varchar(150 char),
     primary key (Promo_Code),
     foreign key (Business_Username) references business (Username)
         on delete cascade,
@@ -238,10 +238,10 @@ create table trav_group_sponsored_deals
 create table bus_grp_sponsored_deals
 (
     Promo_Code        char(100),
-    Business_Username char(50) not null,
+    Business_Username char(15)        not null,
     Group_ID          integer not null,
-    Condition         varchar(250 char),
-    Deal              varchar(250 char),
+    Condition         varchar(150 char),
+    Deal              varchar(150 char),
     primary key (Promo_Code),
     foreign key (Business_Username) references business (Username)
         on delete cascade,
@@ -252,7 +252,7 @@ create table bus_grp_sponsored_deals
 create table trav_grp_trip_interests
 (
     Trip_ID       integer,
-    Interest_Name char(50),
+    Interest_Name char(35),
     primary key (Trip_ID, Interest_Name),
     foreign key (Trip_ID) references trav_grp_trip
         on delete cascade,
@@ -263,7 +263,7 @@ create table trav_grp_trip_interests
 create table bus_grp_trip_interests
 (
     Trip_ID       integer,
-    Interest_Name char(50),
+    Interest_Name char(35),
     primary key (Trip_ID, Interest_Name),
     foreign key (Trip_ID) references bus_grp_trip
         on delete cascade,
@@ -274,10 +274,10 @@ create table bus_grp_trip_interests
 create table trav_grp_trp_traveller_forum_posts
 (
     Post_ID         integer,
-    Title           char(50),
-    Body            varchar(250 char),
+    Title           char(35),
+    Body            varchar(150 char),
     Time_Posted     timestamp,
-    Author_Username char(50),
+    Author_Username char(15),
     Trip_ID         integer not null,
     primary key (Post_ID),
     foreign key (Author_Username) references traveller (Username)
@@ -289,10 +289,10 @@ create table trav_grp_trp_traveller_forum_posts
 create table bus_grp_trp_traveller_forum_posts
 (
     Post_ID         integer,
-    Title           char(50),
-    Body            varchar(250 char),
+    Title           char(35),
+    Body            varchar(150 char),
     Time_Posted     timestamp,
-    Author_Username char(50),
+    Author_Username char(15),
     Trip_ID         integer not null,
     primary key (Post_ID),
     foreign key (Author_Username) references traveller (Username)
@@ -304,10 +304,10 @@ create table bus_grp_trp_traveller_forum_posts
 create table trav_grp_trp_business_forum_posts
 (
     Post_ID         integer,
-    Title           char(50),
-    Body            varchar(250 char),
+    Title           char(35),
+    Body            varchar(150 char),
     Time_Posted     timestamp,
-    Author_Username char(50),
+    Author_Username char(15),
     Trip_ID         integer not null,
     primary key (Post_ID),
     foreign key (Author_Username) references business (Username)
@@ -319,10 +319,10 @@ create table trav_grp_trp_business_forum_posts
 create table bus_grp_trp_business_forum_posts
 (
     Post_ID         integer,
-    Title           char(50),
-    Body            varchar(250 char),
+    Title           char(35),
+    Body            varchar(150 char),
     Time_Posted     timestamp,
-    Author_Username char(50),
+    Author_Username char(15),
     Trip_ID         integer not null,
     primary key (Post_ID),
     foreign key (Author_Username) references business (Username)
@@ -335,9 +335,9 @@ create table trav_grp_trp_trav_post_traveller_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
-    Body            varchar(250 char),
+    Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(50),
+    Author_Username char(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references trav_grp_trp_traveller_forum_posts
         on delete cascade,
@@ -349,9 +349,9 @@ create table bus_grp_trp_trav_post_traveller_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
-    Body            varchar(250 char),
+    Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(50),
+    Author_Username char(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references bus_grp_trp_traveller_forum_posts
         on delete cascade,
@@ -363,9 +363,9 @@ create table trav_grp_trp_trav_post_business_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
-    Body            varchar(250 char),
+    Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(50),
+    Author_Username char(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references trav_grp_trp_traveller_forum_posts
         on delete cascade,
@@ -377,9 +377,9 @@ create table bus_grp_trp_trav_post_business_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
-    Body            varchar(250 char),
+    Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(50),
+    Author_Username char(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references bus_grp_trp_traveller_forum_posts
         on delete cascade,
@@ -391,9 +391,9 @@ create table trav_grp_trp_bus_post_traveller_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
-    Body            varchar(250 char),
+    Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(50),
+    Author_Username char(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references trav_grp_trp_business_forum_posts
         on delete cascade,
@@ -405,9 +405,9 @@ create table bus_grp_trp_bus_post_traveller_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
-    Body            varchar(250 char),
+    Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(50),
+    Author_Username char(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references bus_grp_trp_business_forum_posts
         on delete cascade,
@@ -419,9 +419,9 @@ create table trav_grp_trp_bus_post_business_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
-    Body            varchar(250 char),
+    Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(50),
+    Author_Username char(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references trav_grp_trp_business_forum_posts
         on delete cascade,
@@ -433,9 +433,9 @@ create table bus_grp_trp_bus_post_business_comments
 (
     Post_ID         integer,
     Comment_ID      integer,
-    Body            varchar(250 char),
+    Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(50),
+    Author_Username char(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references bus_grp_trp_business_forum_posts
         on delete cascade,
@@ -669,7 +669,7 @@ values (999, 0002, 'Santander', 'Sangria Party', 3, 'Meet fellow Caminos', '2020
 insert into TRAV_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
 values (888, 0002, 'Barcelona', 'Take a break from walking', 200, 'Barcelona Sightseeing', '2020-05-14', '2020-05-16');
 insert into TRAV_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
-values (666, 0004, 'Taipei', 'Let''s visit the National Palace Museum', 100, 'NPM has a Permanent collection of nearly 700,000 pieces of ancient Chinese imperial artifacts and artwork.', '2020-05-23', NULL);
+values (666, 0004, 'Taipei', 'Visit the National Palace Museum', 100, 'NPM has a Permanent collection of nearly 700,000 pieces of ancient Chinese imperial artifacts and artwork.', '2020-05-23', NULL);
 insert into TRAV_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
 values (333, 0003, 'London', 'Visit the British Museum', 0, 'Welcome to the British Museum – discover two million years of human history and culture.', '2020-03-20', '2020-03-20');
 insert into TRAV_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
@@ -747,16 +747,16 @@ values (7340444, 'How hot is Taipei in May?', 'I’m taking 2 t-shirts for this 
 insert into TRAV_GRP_TRP_TRAVELLER_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
 values (0000932, 'Family emergency!', 'Sorry, I’ve gotta bail - family emergency. See you next time!', '2020-02-28 17:58:24', 'oberberi', 0005);
 insert into TRAV_GRP_TRP_TRAVELLER_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
-values (3276498, 'Do I need to know Spanish for this trip?', NULL, '2020-02-28 15:01:57', 'meme009', 0002);
+values (3276498, 'Do I need to know Spanish?', NULL, '2020-02-28 15:01:57', 'meme009', 0002);
 insert into TRAV_GRP_TRP_TRAVELLER_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
 values (4340989, 'Is GfC okay?', 'Did you see those posts earlier...? They get a new intern or something?', '2020-03-01 20:20:20', 'meme009', 0001);
 
 insert into BUS_GRP_TRP_BUSINESS_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
 values (5552242, 'GIVEAWAY! FREE CINNAMON BUNS', 'First 10 people to comment when we were first founded will win free cinnamon buns!', '2020-01-23 00:12:35', 'coffeeee123', 0005);
 insert into BUS_GRP_TRP_BUSINESS_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
-values (2323590, 'What’s your favourite part about Wednesdays?', 'We love that the week is halfway done!', '2020-09-21 23:59:59', 'love0totsravel', 0002);
+values (2323590, 'Your favourite part of Wednesdays?', 'We love that the week is halfway done!', '2020-09-21 23:59:59', 'love0totsravel', 0002);
 insert into BUS_GRP_TRP_BUSINESS_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
-values (1231231, 'What’s your favourite item you’re gonna wear?', 'We love Wunder Under leggings!', '2021-09-23 12:34:56', 'lululemon_admin', 0005);
+values (1231231, 'What are you gonna wear?', 'We love Wunder Under leggings!', '2021-09-23 12:34:56', 'lululemon_admin', 0005);
 insert into BUS_GRP_TRP_BUSINESS_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
 values (5326785, '2 more days!!!!!', 'Who’s as pumped as we are??', '2019-04-29 11:11:11', 'gatosgatods', 0004);
 insert into BUS_GRP_TRP_BUSINESS_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
@@ -774,11 +774,11 @@ insert into TRAV_GRP_TRP_BUSINESS_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED
 values (4340988, '???????????????', 'I''m becoming desperate...please visit us? :))', '2020-03-01 16:00:00', 'coffeeee123', 0001);
 
 insert into BUS_GRP_TRP_TRAVELLER_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
-values (3049589, 'Hey...sorry if this isn''t allowed, but...', 'Do you guys feel like this group''s trips have been going downhill? The latest Coffee ~~Buffet~~ is way overpriced for what it is. Meh.', '2020-04-15 15:23:33', 'letorysi', 0005);
+values (3049589, 'Hey...sorry if not allowed, but...', 'Do you guys feel like this group''s trips have been going downhill? The latest Coffee ~~Buffet~~ is way overpriced for what it is. Meh.', '2020-04-15 15:23:33', 'letorysi', 0005);
 insert into BUS_GRP_TRP_TRAVELLER_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
 values (3454945, 'I''m so excited!!! Aaaahhhh <3333333', 'This trip sounds so fun!!!! I''m going to roast my beans to CINDERS \o/ dark roast best roast 🔥🔥🔥', '2020-04-12 02:23:44', 'meme009', 0003);
 insert into BUS_GRP_TRP_TRAVELLER_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
-values (3454946, 'Send help please', 'Just saw the buffet price...$50...wow. WOW. I haven''t missed a single trip so far and I don''t want to lost my special status :( I checked their usual prices and $50 is insane, even with other fees. Even **I** can''t consume that much caffeine.', '2020-04-16 04:00:34', 'meme009', 0005);
+values (3454946, 'Send help please', 'Just saw the buffet price...$50...wow. WOW. I haven''t missed a single trip so far and I don''t want to lost my special status :(', '2020-04-16 04:00:34', 'meme009', 0005);
 insert into BUS_GRP_TRP_TRAVELLER_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
 values (3485988, 'Let''s go to UBC next!! 😍😍😍', 'I heard the clock tower is a good spot?? Do you think we can go up?', '2020-05-02 03:23:33', 'meme009', 0004);
 insert into BUS_GRP_TRP_TRAVELLER_FORUM_POSTS (POST_ID, TITLE, BODY, TIME_POSTED, AUTHOR_USERNAME, TRIP_ID)
