@@ -8,7 +8,7 @@ public class BusinessModel extends UserModel {
     private final String city;
 
 
-    public BusinessModel(String username, String name, String country, String province, String city, String gender) {
+    public BusinessModel(String username, String name, String country, String province, String city) {
         this.username = username;
         this.name = name;
         this.country = country;
