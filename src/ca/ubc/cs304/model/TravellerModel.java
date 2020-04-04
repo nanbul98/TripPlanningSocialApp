@@ -2,7 +2,7 @@ package ca.ubc.cs304.model;
 
 import java.time.LocalDate;
 
-public class TravellerModel extends UserModel {
+public class TravellerModel {
     private final String username;
     private final String name;
     private final String country;

@@ -5,7 +5,7 @@ import ca.ubc.cs304.model.*;
 import ca.ubc.cs304.model.BusinessModel;
 import ca.ubc.cs304.model.GroupModel;
 import ca.ubc.cs304.model.TravellerModel;
-import ca.ubc.cs304.model.UserModel;
+//import ca.ubc.cs304.model.UserModel;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -43,6 +43,23 @@ public class NewDatabaseConnectionHandler {
         }
     }
 
+    public boolean login(String username, String password) {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+
+            connection = DriverManager.getConnection(ORACLE_URL, username, password);
+            connection.setAutoCommit(false);
+
+            System.out.println("\nConnected to Oracle!");
+            return true;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return false;
+        }
+    }
+
     private void rollbackConnection() {
         try  {
             connection.rollback();
@@ -76,10 +93,14 @@ public class NewDatabaseConnectionHandler {
 
     }
 
+    public void databaseSetup() {
 
-    public void deleteUser(UserModel user) {
+    }
+
+
+    public void deleteUser(TravellerModel user) {
         try {
-            if (user instanceof TravellerModel) {
+            //if (user instanceof TravellerModel) {
                 PreparedStatement ps = connection.prepareStatement("DELETE FROM traveller WHERE username = ?");
                 String username = user.getUsername();
                 ps.setString(1, username);
@@ -92,6 +113,7 @@ public class NewDatabaseConnectionHandler {
                 connection.commit();
 
                 ps.close();
+                /*
             } else {
                 PreparedStatement ps = connection.prepareStatement("DELETE FROM business WHERE username = ?");
                 String username = user.getUsername();
@@ -108,6 +130,8 @@ public class NewDatabaseConnectionHandler {
 
 
             }
+
+                 */
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
