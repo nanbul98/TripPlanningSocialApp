@@ -1,6 +1,6 @@
 package ca.ubc.cs304.model;
 
-public class BusinessModel extends UserModel {
+public class BusinessModel {
     private final String username;
     private final String name;
     private final String country;
