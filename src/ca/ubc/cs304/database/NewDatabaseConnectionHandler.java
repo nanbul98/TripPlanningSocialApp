@@ -53,10 +53,9 @@ public class NewDatabaseConnectionHandler {
 
     //queries start
 
-
     public void insertTraveller(TravellerModel model) {
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO travellers VALUES (?,?,?,?,?,?,?)");
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO traveller VALUES (?,?,?,?,?,?,?)");
             ps.setString(1, model.getUsername());
             ps.setString(2, model.getName());
             ps.setString(3, model.getCountry());
@@ -192,15 +191,14 @@ public class NewDatabaseConnectionHandler {
 
 
 
-
     public List<String[]> searchGroupMember (int groupID, String name) {
         List<String[]> mem = new ArrayList<>();
         String[] colName = {"Username", "Name", "Location", "Gender", "Birthdate"};
         mem.add(colName);
         try {
-            String sql = "SELECT Username, Name, City, Gender, Birthdate\n" +
+            String sql = "SELECT DISTINCT Username, Name, City, Gender, Birthdate\n" +
                     "FROM traveller T, group_member_travellers G\n" +
-                    "WHERE G.groupID = ? AND T.name = ?";
+                    "WHERE G.group_id = ? AND T.name = ?";
             PreparedStatement prepState;
             prepState = connection.prepareStatement(sql);
             prepState.setString(1, name);
@@ -220,14 +218,16 @@ public class NewDatabaseConnectionHandler {
         return mem;
     }
 
+
     public int getAverageTripActivitiesPerGroup() {
         int result = 0;
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT AVG(TripActivity.count_activities) AS TotalAverage FROM (SELECT Count(*) AS count_activities FROM trav_grp_trp_activity GROUP BY Trip_ID ) AS TripActivity");
 
             ResultSet rs = ps.executeQuery();
-            result = rs.getInt("TotalAverage");
-
+            while(rs.next()) {
+              result = rs.getInt("TotalAverage");
+            }
 
             rs.close();
             ps.close();
@@ -239,6 +239,50 @@ public class NewDatabaseConnectionHandler {
         return result;
     }
 
+    public int countAllGroupMember (int groupID) {
+        int count = 0;
+
+        try {
+            String sql = "SELECT COUNT(*) AS total \n" +
+                         "FROM traveller T, trav_group_member_travellers G\n" +
+                         "WHERE T.username = G.username\n" +
+                         "GROUP BY G.group_id\n" +
+                         "HAVING G.group_id = ?";
+
+            PreparedStatement prepState;
+            prepState = connection.prepareStatement(sql);
+
+            ResultSet rs = prepState.executeQuery();
+            while (rs.next()) {
+                count = rs.getInt("total");
+            }
+
+
+        } catch (Exception e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return count;
+    }
+
+
+    public List<String[]> findStarMember (int groupID) {
+        List<String[]> mem = new ArrayList<>();
+        String[] colName = {"Username", "Name", "Location", "Gender", "Birthdate"};
+        mem.add(colName);
+        try {
+            String sql = "CREATE VIEW trips_from_specific_group AS\n" +
+                    "SELECT * FROM trav_grp_trip WHERE group_ID";
+            String sql2 = "SELECT u.name FROM traveller u WHERE not exists\n" +
+                          "(SELECT * from trips_from_specific_group t where not exists\n" +
+                          "(SELECT g.username FROM TRAV_GROUP_MEMBER_TRAVELLERS g where u.username = g.username AND t.Group_ID  = g.Group_ID))";
+
+        // TODO need to finish the code later
+
+        } catch (Exception e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return mem;
+    }
 
 
 
