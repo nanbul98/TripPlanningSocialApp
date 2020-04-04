@@ -9,9 +9,9 @@ public class TravellerModel extends UserModel {
     private final String province;
     private final String city;
     private final String gender;
-    private final LocalDate dob;
+    private final String dob;
 
-    public TravellerModel(String username, String name, String country, String province, String city, String gender, LocalDate dob) {
+    public TravellerModel(String username, String name, String country, String province, String city, String gender, String dob) {
         this.username = username;
         this.name = name;
         this.country = country;
@@ -39,6 +39,6 @@ public class TravellerModel extends UserModel {
     public String getGender() {
         return gender;
     };
-    public LocalDate getDOB() { return  dob; };
+    public String getDOB() { return  dob; };
 }
 
