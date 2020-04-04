@@ -1,6 +1,11 @@
 package ca.ubc.cs304.database;
 
+
 import ca.ubc.cs304.model.*;
+import ca.ubc.cs304.model.BusinessModel;
+import ca.ubc.cs304.model.GroupModel;
+import ca.ubc.cs304.model.TravellerModel;
+import ca.ubc.cs304.model.UserModel;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -156,6 +161,34 @@ public class NewDatabaseConnectionHandler {
 
         return result.toArray(new BusinessModel[result.size()]);
     }
+
+    public GroupModel[] getGroupsBasedOnInterest(String keyword) {
+        ArrayList<GroupModel> result = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT tg.Title, tg.Description, tg.Group_ID, tg.Owner_Username FROM traveller_group tg, trav_group_interests tgi WHERE tgi.Group_ID = tg.Group_ID AND tgi.Interest_Name LIKE ?" +
+                    "UNION" + "SELECT bg.Title, bg.Description, bg.Group_ID, bg.Owner_Username FROM business_group tg, bus_group_interests bgi WHERE bgi.Group_ID = bg.Group_ID AND bgi.Interest_Name LIKE ?");
+            ps.setString(1,keyword);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                GroupModel model = new GroupModel(rs.getInt("groupID"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("owner_username"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+
+        } catch(SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new GroupModel[result.size()]);
+    }
+
+
 
 
     public List<String[]> searchGroupMember (int groupID, String name) {
