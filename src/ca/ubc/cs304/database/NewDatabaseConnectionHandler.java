@@ -9,7 +9,9 @@ import ca.ubc.cs304.model.UserModel;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NewDatabaseConnectionHandler {
     // Use this version of the ORACLE_URL if you are running the code off of the server
@@ -165,7 +167,7 @@ public class NewDatabaseConnectionHandler {
         ArrayList<GroupModel> result = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT tg.Title, tg.Description, tg.Group_ID, tg.Owner_Username FROM traveller_group tg, trav_group_interests tgi WHERE tgi.Group_ID = tg.Group_ID AND tgi.Interest_Name LIKE ?" +
-                    "UNION" + "SELECT bg.Title, bg.Description, bg.Group_ID, bg.Owner_Username FROM business_group tg, bus_group_interests bgi WHERE bgi.Group_ID = bg.Group_ID AND bgi.Interest_Name LIKE ?");
+                    "UNION" + "SELECT bg.Title, bg.Description, bg.Group_ID, bg.Owner_Username FROM business_group tg, bus_group_interests bgi WHERE bgi.Group_ID = bg.Group_ID AND bgi.Interest_Name LIKE %" + "?" + "%");
             ps.setString(1,keyword);
             ResultSet rs = ps.executeQuery();
 
@@ -214,6 +216,27 @@ public class NewDatabaseConnectionHandler {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
         return mem;
+    }
+
+
+    public int getAverageTripActivitiesPerGroup() {
+        int result = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT AVG(TripActivity.count_activities) AS TotalAverage FROM (SELECT Count(*) AS count_activities FROM trav_grp_trp_activity GROUP BY Trip_ID ) AS TripActivity");
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+              result = rs.getInt("TotalAverage");
+            }
+
+            rs.close();
+            ps.close();
+
+        } catch(SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result;
     }
 
     public int countAllGroupMember (int groupID) {
