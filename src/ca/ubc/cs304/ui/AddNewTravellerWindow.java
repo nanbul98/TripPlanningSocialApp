@@ -1,6 +1,7 @@
 package ca.ubc.cs304.ui;
 
 import ca.ubc.cs304.delegates.AddNewTravellerWindowDelegate;
+import ca.ubc.cs304.model.TravellerModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -149,7 +150,8 @@ public class AddNewTravellerWindow extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            TravellerModel travellerModel = new TravellerModel(usernameField.getText(),nameField.getText(),countryField.getText(),provinceField.getText(),cityField.getText(),genderField.getText(),birthDateField.getText());
+            delegate.insertNewTraveller(travellerModel);
         }
 
 

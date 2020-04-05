@@ -5,6 +5,7 @@ import ca.ubc.cs304.delegates.AddNewTravellerWindowDelegate;
 import ca.ubc.cs304.delegates.AllTravellersDelegate;
 import ca.ubc.cs304.delegates.LoginWindowDelegate;
 import ca.ubc.cs304.delegates.MainWindowDelegate;
+import ca.ubc.cs304.model.TravellerModel;
 import ca.ubc.cs304.ui.AddNewTravellerWindow;
 import ca.ubc.cs304.ui.AllTravellers;
 import ca.ubc.cs304.ui.LoginWindow;
@@ -118,5 +119,13 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
 
     public void goDeleteTraveller() {
 
+    }
+
+
+    public void insertNewTraveller(TravellerModel travellerModel) {
+        dbHandler.insertTraveller(travellerModel);
+        addNewTravellerWindow.dispose();
+        allTravellers = new AllTravellers();
+        allTravellers.showFrame(this);
     }
 }

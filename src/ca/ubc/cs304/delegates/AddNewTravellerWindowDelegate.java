@@ -1,5 +1,7 @@
 package ca.ubc.cs304.delegates;
 
-public interface AddNewTravellerWindowDelegate {
+import ca.ubc.cs304.model.TravellerModel;
 
+public interface AddNewTravellerWindowDelegate {
+    void insertNewTraveller(TravellerModel travellerModel);
 }
