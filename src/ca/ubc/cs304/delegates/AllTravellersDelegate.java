@@ -6,6 +6,8 @@ import java.util.List;
 public interface AllTravellersDelegate {
     void goAddNewTraveller();
     void goDeleteTraveller();
+    void goToMainWindow();
     public List<String[]> viewAllUsers() throws SQLException;
+    public List<String[]> getTravellerInfoBasedOnTitle(String title) throws SQLException;
 
 }
