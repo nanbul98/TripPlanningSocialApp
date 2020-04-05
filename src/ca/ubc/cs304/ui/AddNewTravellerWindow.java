@@ -141,7 +141,7 @@ public class AddNewTravellerWindow extends JFrame {
             JButton addTravellerButton = new JButton("Add New Traveller");
             contentPane.add(addTravellerButton, gbc);
             gbc.weighty = 1;
-            add(contentPane,gbc);
+            add(contentPane);
 
             // register login button with action event handler
             addTravellerButton.addActionListener(this);

@@ -1,25 +1,20 @@
 package ca.ubc.cs304.controller;
 
 import ca.ubc.cs304.database.NewDatabaseConnectionHandler;
-import ca.ubc.cs304.delegates.AddNewTravellerWindowDelegate;
-import ca.ubc.cs304.delegates.AllTravellersDelegate;
-import ca.ubc.cs304.delegates.LoginWindowDelegate;
-import ca.ubc.cs304.delegates.MainWindowDelegate;
+import ca.ubc.cs304.delegates.*;
 import ca.ubc.cs304.model.TravellerModel;
-import ca.ubc.cs304.ui.AddNewTravellerWindow;
-import ca.ubc.cs304.ui.AllTravellers;
-import ca.ubc.cs304.ui.LoginWindow;
-import ca.ubc.cs304.ui.MainWindow;
+import ca.ubc.cs304.ui.*;
 
 /**
  * This is the main controller class that will orchestrate everything.
  */
-public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTravellersDelegate, AddNewTravellerWindowDelegate {
+public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTravellersDelegate, AddNewTravellerWindowDelegate, DeleteExistingTravellerWindowDelegate {
     private NewDatabaseConnectionHandler dbHandler = null;
     private LoginWindow loginWindow = null;
     private MainWindow mainWindow = null;
     private AllTravellers allTravellers = null;
     private AddNewTravellerWindow addNewTravellerWindow = null;
+    private DeleteExistingTravellerWindow deleteExistingTravellerWindow = null;
 
 
     public TripApp() {
@@ -118,13 +113,22 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
     }
 
     public void goDeleteTraveller() {
-
+        allTravellers.dispose();
+        deleteExistingTravellerWindow = new DeleteExistingTravellerWindow();
+        deleteExistingTravellerWindow.showFrame(this);
     }
 
 
     public void insertNewTraveller(TravellerModel travellerModel) {
         dbHandler.insertTraveller(travellerModel);
         addNewTravellerWindow.dispose();
+        allTravellers = new AllTravellers();
+        allTravellers.showFrame(this);
+    }
+
+    public void deleteTravellerIfExists(String username) {
+        dbHandler.deleteUser(username);
+        deleteExistingTravellerWindow.dispose();
         allTravellers = new AllTravellers();
         allTravellers.showFrame(this);
     }

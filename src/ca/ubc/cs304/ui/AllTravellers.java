@@ -6,7 +6,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class AllTravellers extends JFrame {
 
@@ -22,7 +21,7 @@ public class AllTravellers extends JFrame {
         this.setVisible(true);
     }
 
-    public class MenuPane extends JPanel implements ActionListener {
+    public class MenuPane extends JPanel {
 
         public MenuPane() {
             setBorder(new EmptyBorder(300, 300, 300, 300));
@@ -39,21 +38,25 @@ public class AllTravellers extends JFrame {
 
 
             JPanel page = new JPanel(new GridBagLayout());
-            JButton goToAddTravellers = new JButton("Insert +");
+            JButton goToAddTravellers = new JButton(new AbstractAction("Insert +") {
+                @Override
+                public void actionPerformed( ActionEvent e ) {
+                    delegate.goAddNewTraveller();
+                }
+            });
+            JButton goToDeleteTravellers = new JButton(new AbstractAction("Delete -") {
+                @Override
+                public void actionPerformed( ActionEvent e ) {
+                    delegate.goDeleteTraveller();
+                }
+            });
             gbc.weighty = 1;
             add(goToAddTravellers, gbc);
+            add(goToDeleteTravellers, gbc);
 
-            goToAddTravellers.addActionListener(this);
 
-
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            delegate.goAddNewTraveller();
 
         }
-
 
     }
 
