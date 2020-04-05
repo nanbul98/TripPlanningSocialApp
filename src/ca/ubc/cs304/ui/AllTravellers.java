@@ -14,6 +14,7 @@ public class AllTravellers extends JFrame {
     public AllTravellers() { super("List of All Travellers");}
 
     public void showFrame(AllTravellersDelegate delegate) {
+        this.delegate = delegate;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(new AllTravellers.MenuPane());
         this.pack();
@@ -37,11 +38,19 @@ public class AllTravellers extends JFrame {
             gbc.fill = GridBagConstraints.HORIZONTAL;
 
 
+            JPanel page = new JPanel(new GridBagLayout());
+            JButton goToAddTravellers = new JButton("Insert +");
+            gbc.weighty = 1;
+            add(goToAddTravellers, gbc);
+
+            goToAddTravellers.addActionListener(this);
+
 
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            delegate.goAddNewTraveller();
 
         }
 
