@@ -121,7 +121,7 @@ public class NewDatabaseConnectionHandler {
     //Viewing all Users table
     public List<String[]> viewAllUsers() throws SQLException{
         List<String[]> res = new ArrayList<>();
-        String[] colName = {"Username","Name","Country","Province","City","Gender","Date of Birth"};
+        String[] colName = {"Username","Name","Country","Province","City","Gender","Birthdate"};
         res.add(colName);
 
         try {
@@ -140,13 +140,45 @@ public class NewDatabaseConnectionHandler {
                 row[3] = rs.getString("Province");
                 row[4] = rs.getString("City");
                 row[5] = rs.getString("Gender");
-                row[6] = rs.getString("Date of Birth");
+                row[6] = rs.getString("Birthdate");
                 res.add(row);
             }
         } catch (SQLException e) {
             rollbackConnection();
             throw e;
         }
+        return res;
+    }
+    // Search User by name
+    public List<String[]> getTravellerInfoBasedOnTitle(String title) {
+        List<String[]> res = new ArrayList<>();
+        String[] colName = {"Username","Name","Country","Province","City","Gender","Birthdate"};
+        res.add(colName);
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM traveller WHERE name = ?");
+            ps.setString(1,title);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                String[] row = new String[colName.length];
+                row[0] = rs.getString("Username");
+                row[1] = rs.getString("Name");
+                row[2] = rs.getString("Country");
+                row[3] = rs.getString("Province");
+                row[4] = rs.getString("City");
+                row[5] = rs.getString("Gender");
+                row[6] = rs.getString("Birthdate");
+                res.add(row);
+            }
+
+            rs.close();
+            ps.close();
+
+        } catch(SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
         return res;
     }
 
@@ -507,35 +539,6 @@ public class NewDatabaseConnectionHandler {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
         }
-    }
-
-    public TravellerModel[] getTravellerInfoBasedOnTitle(String title) {
-        ArrayList<TravellerModel> result = new ArrayList<>();
-
-        try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM traveller WHERE name = ?");
-            ps.setString(1,title);
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()) {
-                TravellerModel model = new TravellerModel(rs.getString("username"),
-                        rs.getString("name"),
-                        rs.getString("country"),
-                        rs.getString("province"),
-                        rs.getString("city"),
-                        rs.getString("gender"),
-                        rs.getString("birthdate"));
-                result.add(model);
-            }
-
-            rs.close();
-            ps.close();
-
-        } catch(SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-
-        return result.toArray(new TravellerModel[result.size()]);
     }
 
     public int getAverageTripActivitiesPerGroup() {

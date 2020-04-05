@@ -154,7 +154,8 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
 
     @Override
     public List<String[]> findSuperStar(String groupID) throws SQLException{
-        return dbHandler.findSuperStar(groupID);
+        return null;
+//        return dbHandler.findSuperStar(groupID);
     }
     @Override
     public List<String[]> viewGroupTrips(String groupID) throws SQLException{
@@ -183,8 +184,15 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
     }
 
     @Override
+    public void goToMainWindow() {
+        allTravellers.dispose();
+        mainWindow = new MainWindow();
+        mainWindow.showFrame(this);
+    }
+
+    @Override
     public List<String[]> viewAllUsers() throws SQLException {
-        return null;
+        return dbHandler.viewAllUsers();
     }
 
 
