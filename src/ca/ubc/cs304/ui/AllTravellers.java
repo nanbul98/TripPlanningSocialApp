@@ -12,6 +12,7 @@ public class AllTravellers extends JFrame {
     private AllTravellersDelegate delegate;
     public AllTravellers() { super("List of All Travellers");}
 
+
     public void showFrame(AllTravellersDelegate delegate) {
         this.delegate = delegate;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

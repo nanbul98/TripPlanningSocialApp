@@ -95,15 +95,15 @@ public class NewDatabaseConnectionHandler {
     }
 
 
-    public void deleteUser(String username) {
+    public void deleteUser(String user) {
         try {
-
-                PreparedStatement ps = connection.prepareStatement("DELETE FROM traveller WHERE username = ?");
-                ps.setString(1, username);
+                String sql = "DELETE FROM traveller \n" + "WHERE Username = ?";
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setString(1, user);
 
                 int rowCount = ps.executeUpdate();
                 if (rowCount == 0) {
-                    System.out.println(WARNING_TAG + " Traveller " + username + " does not exist!");
+                    System.out.println(WARNING_TAG + " Traveller " + user + " does not exist!");
                 }
 
                 connection.commit();
@@ -114,6 +114,38 @@ public class NewDatabaseConnectionHandler {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
         }
+    }
+
+    //Viewing all Users table
+    public List<String[]> viewAllUsers() throws SQLException{
+        List<String[]> res = new ArrayList<>();
+        String[] colName = {"Username","Name","Country","Province","City","Gender","Date of Birth"};
+        res.add(colName);
+
+        try {
+            String sql = "SELECT * FROM traveller";
+            PreparedStatement prepState;
+            prepState = connection.prepareStatement(sql);
+            //PreparedStatement stmt = connection.createStatement();
+            //ResultSet rs = stmt.executeQuery("SELECT * FROM traveller_group");
+
+            ResultSet rs = prepState.executeQuery();
+            while (rs.next()) {
+                String[] row = new String[colName.length];
+                row[0] = rs.getString("Username");
+                row[1] = rs.getString("Name");
+                row[2] = rs.getString("Country");
+                row[3] = rs.getString("Province");
+                row[4] = rs.getString("City");
+                row[5] = rs.getString("Gender");
+                row[6] = rs.getString("Date of Birth");
+                res.add(row);
+            }
+        } catch (SQLException e) {
+            rollbackConnection();
+            throw e;
+        }
+        return res;
     }
 
 

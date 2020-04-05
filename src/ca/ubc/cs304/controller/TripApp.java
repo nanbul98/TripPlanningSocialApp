@@ -5,6 +5,9 @@ import ca.ubc.cs304.delegates.*;
 import ca.ubc.cs304.model.TravellerModel;
 import ca.ubc.cs304.ui.*;
 
+import java.sql.SQLException;
+import java.util.List;
+
 /**
  * This is the main controller class that will orchestrate everything.
  */
@@ -116,6 +119,11 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         allTravellers.dispose();
         deleteExistingTravellerWindow = new DeleteExistingTravellerWindow();
         deleteExistingTravellerWindow.showFrame(this);
+    }
+
+    @Override
+    public List<String[]> viewAllUsers() throws SQLException {
+        return null;
     }
 
 
