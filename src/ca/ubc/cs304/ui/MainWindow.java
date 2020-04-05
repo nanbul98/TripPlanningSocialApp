@@ -53,29 +53,40 @@ public class MainWindow extends JFrame{
 
             JPanel buttons = new JPanel(new GridBagLayout());
             JButton allTravellers = new JButton("See All Travellers");
+            allTravellers.setActionCommand("action1");
             buttons.add(allTravellers, gbc);
-            buttons.add(new JButton("See All Groups"), gbc);
+
+            JButton allGroups = new JButton("See All Groups");
+            buttons.add(allGroups,gbc);
+            allGroups.setActionCommand("action2");
+
             buttons.add(new JButton("See All Interests"), gbc);
             gbc.weighty = 1;
             add(buttons, gbc);
 
             allTravellers.addActionListener(this);
-
+            allGroups.addActionListener(this);
 
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            delegate.goToTravellersPage();
+            String actionCommand = ((JButton) e.getSource()).getActionCommand();
+
+            switch (actionCommand) {
+                case "action1": delegate.goToTravellersPage();
+                break;
+                case "action2": delegate.goToGroupsPage();
+                break;
+            }
+
+
+
+
         }
 
 
     }
-
-
-
-
-
 
 
 }

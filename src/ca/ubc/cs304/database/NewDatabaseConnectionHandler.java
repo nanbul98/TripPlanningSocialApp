@@ -69,6 +69,7 @@ public class NewDatabaseConnectionHandler {
     }
 
     //queries start
+    //queries related to Traveller
 
     public void insertTraveller(TravellerModel model) {
         try {
@@ -137,6 +138,39 @@ public class NewDatabaseConnectionHandler {
             rollbackConnection();
         }
     }
+
+
+    //queries related to Group
+
+    //Viewing all Groups table
+    public List<String[]> viewAllGroups() throws SQLException{
+        List<String[]> res = new ArrayList<>();
+        String[] colName = {"GroupID","Title","Description","Owner"};
+        res.add(colName);
+
+        try {
+            String sql = "SELECT * FROM traveller_group";
+            PreparedStatement prepState;
+            prepState = connection.prepareStatement(sql);
+            //PreparedStatement stmt = connection.createStatement();
+            //ResultSet rs = stmt.executeQuery("SELECT * FROM traveller_group");
+
+            ResultSet rs = prepState.executeQuery();
+            while (rs.next()) {
+                String[] row = new String[colName.length];
+                row[0] = rs.getString("GroupID");
+                row[1] = rs.getString("Title");
+                row[2] = rs.getString("Description");
+                row[3] = rs.getString("Owner");
+                res.add(row);
+            }
+        } catch (SQLException e) {
+            rollbackConnection();
+            throw e;
+        }
+        return res;
+    }
+
 
 
     public void updateActivity(int id, String description) {
