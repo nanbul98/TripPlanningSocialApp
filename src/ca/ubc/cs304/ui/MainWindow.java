@@ -3,19 +3,10 @@ package ca.ubc.cs304.ui;
 import ca.ubc.cs304.delegates.MainWindowDelegate;
 
 import javax.swing.*;
-import javax.swing.JFrame;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JOptionPane;
-import javax.swing.border.EmptyBorder;
 
 public class MainWindow extends JFrame{
 
@@ -26,6 +17,7 @@ public class MainWindow extends JFrame{
     }
 
     public void showFrame(MainWindowDelegate delegate) {
+        this.delegate = delegate;
         //this.setSize(1000,600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(new MenuPane());
@@ -42,7 +34,9 @@ public class MainWindow extends JFrame{
 
     }
 
-    public class MenuPane extends JPanel {
+
+
+    public class MenuPane extends JPanel implements ActionListener {
 
         public MenuPane() {
             setBorder(new EmptyBorder(300, 300, 300, 300));
@@ -58,12 +52,23 @@ public class MainWindow extends JFrame{
             gbc.fill = GridBagConstraints.HORIZONTAL;
 
             JPanel buttons = new JPanel(new GridBagLayout());
-            buttons.add(new JButton("See All Travellers"), gbc);
+            JButton allTravellers = new JButton("See All Travellers");
+            buttons.add(allTravellers, gbc);
             buttons.add(new JButton("See All Groups"), gbc);
             buttons.add(new JButton("See All Interests"), gbc);
             gbc.weighty = 1;
             add(buttons, gbc);
+
+            allTravellers.addActionListener(this);
+
+
         }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            delegate.goToTravellersPage();
+        }
+
 
     }
 
