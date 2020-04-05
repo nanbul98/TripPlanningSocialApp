@@ -142,7 +142,7 @@ public class NewDatabaseConnectionHandler {
     public TravellerModel[] getTravellerInfoBasedOnTitle(String title) {
         ArrayList<TravellerModel> result = new ArrayList<>();
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM business WHERE name = ?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM traveller WHERE name = ?");
             ps.setString(1,title);
             ResultSet rs = ps.executeQuery();
 
