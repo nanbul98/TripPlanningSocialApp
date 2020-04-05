@@ -187,16 +187,38 @@ public class NewDatabaseConnectionHandler {
         return result.toArray(new BusinessModel[result.size()]);
     }
 
+    public InterestModel[] getAllInterests() {
+        ArrayList<InterestModel> result = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM interest");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                InterestModel model = new InterestModel(rs.getString("name"),
+                        rs.getString("description"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new InterestModel[result.size()]);
+    }
+
     public GroupModel[] getGroupsBasedOnInterest(String keyword) {
         ArrayList<GroupModel> result = new ArrayList<>();
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT tg.Title, tg.Description, tg.Group_ID, tg.Owner_Username FROM traveller_group tg, trav_group_interests tgi WHERE tgi.Group_ID = tg.Group_ID AND tgi.Interest_Name LIKE ?" +
-                    "UNION" + "SELECT bg.Title, bg.Description, bg.Group_ID, bg.Owner_Username FROM business_group tg, bus_group_interests bgi WHERE bgi.Group_ID = bg.Group_ID AND bgi.Interest_Name LIKE %" + "?" + "%");
-            ps.setString(1,keyword);
+            PreparedStatement ps = connection.prepareStatement("SELECT tg.Title, tg.Description, tg.Group_ID, tg.Owner_Username FROM traveller_group tg, trav_group_interests tgi WHERE tgi.Group_ID = tg.Group_ID AND tgi.Interest_Name = ?" +
+                    " UNION " + "SELECT bg.Title, bg.Description, bg.Group_ID, bg.Owner_Username FROM business_group bg, bus_group_interests bgi WHERE bgi.Group_ID = bg.Group_ID AND bgi.Interest_Name = ?");
+            ps.setString(1, keyword);
+            ps.setString(2, keyword);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
-                GroupModel model = new GroupModel(rs.getInt("groupID"),
+                GroupModel model = new GroupModel(rs.getInt("group_ID"),
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getString("owner_username"));

@@ -2,20 +2,23 @@ package ca.ubc.cs304.controller;
 
 import ca.ubc.cs304.database.NewDatabaseConnectionHandler;
 import ca.ubc.cs304.delegates.AllTravellersDelegate;
+import ca.ubc.cs304.delegates.InterestListWindowDelegate;
 import ca.ubc.cs304.delegates.LoginWindowDelegate;
 import ca.ubc.cs304.delegates.MainWindowDelegate;
-import ca.ubc.cs304.ui.AllTravellers;
-import ca.ubc.cs304.ui.LoginWindow;
-import ca.ubc.cs304.ui.MainWindow;
+import ca.ubc.cs304.model.GroupModel;
+import ca.ubc.cs304.model.InterestModel;
+import ca.ubc.cs304.ui.*;
 
 /**
  * This is the main controller class that will orchestrate everything.
  */
-public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTravellersDelegate {
-    private NewDatabaseConnectionHandler dbHandler = null;
+public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTravellersDelegate, InterestListWindowDelegate {
+    private NewDatabaseConnectionHandler dbHandler;
     private LoginWindow loginWindow = null;
     private MainWindow mainWindow = null;
     private AllTravellers allTravellers = null;
+    private InterestListWindow allInterests = null;
+    private InterestGroupListWindow interestGroups = null;
 
 
     public TripApp() {
@@ -86,7 +89,7 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
      * called branch and creating a new one for this project to use
      */
     public void databaseSetup() {
-        dbHandler.databaseSetup();;
+        dbHandler.databaseSetup();
 
     }
 
@@ -104,6 +107,30 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         mainWindow.dispose();
         allTravellers = new AllTravellers();
         allTravellers.showFrame(this);
+    }
 
+    public void goToGroupsPage() {
+        // TODO link up after merged
+    }
+
+    public void goToInterestsPage() {
+        mainWindow.dispose();
+        allInterests = new InterestListWindow();
+        allInterests.showFrame(this);
+    }
+
+    public void goToInterestGroupsPage(GroupModel[] groupResults) {
+        interestGroups = new InterestGroupListWindow(groupResults);
+        interestGroups.showFrame(this);
+    }
+
+    @Override
+    public InterestModel[] getAllInterests() {
+        return dbHandler.getAllInterests();
+    }
+
+    @Override
+    public GroupModel[] findGroupsWithInterest(String interestName) {
+        return dbHandler.getGroupsBasedOnInterest(interestName);
     }
 }
