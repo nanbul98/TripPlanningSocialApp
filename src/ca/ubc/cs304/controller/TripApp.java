@@ -45,8 +45,8 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
     private void start() {
         loginWindow = new LoginWindow();
         loginWindow.showFrame(this);
-        //login automatically
-        this.testLogin("ora_yeramko", "a80591878");
+        // login automatically
+        // this.testLogin("ora_yeramko", "a80591878");
     }
 
     /**
@@ -85,29 +85,6 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         }
     }
 
-    /**
-     * TerminalTransactionsDelegate Implementation
-     *
-     * The TerminalTransaction instance tells us that it is done with what it's
-     * doing so we are cleaning up the connection since it's no longer needed.
-     */
-    public void terminalTransactionsFinished() {
-        dbHandler.close();
-        dbHandler = null;
-
-        System.exit(0);
-    }
-
-
-    /**
-     * TerminalTransactionsDelegate Implementation
-     *
-     * The TerminalTransaction instance tells us that the user is fine with dropping any existing table
-     * called branch and creating a new one for this project to use
-     */
-    public void databaseSetup() {
-        dbHandler.databaseSetup();
-    }
 
     /**
      * Main method called at launch time
@@ -125,9 +102,6 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         allTravellers.showFrame(this);
     }
 
-    public void goToGroupsPage() {
-        // TODO link up after merged
-    }
 
     public void goToInterestsPage() {
         mainWindow.dispose();

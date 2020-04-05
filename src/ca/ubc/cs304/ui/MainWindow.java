@@ -8,10 +8,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MainWindow extends JFrame{
+public class MainWindow extends JFrame {
 
     // delegate
     private MainWindowDelegate delegate;
+
     public MainWindow() {
         super("Main Window");
     }
@@ -26,7 +27,6 @@ public class MainWindow extends JFrame{
         this.setVisible(true);
 
     }
-
 
 
     public static void main(String[] args) {
@@ -82,3 +82,4 @@ public class MainWindow extends JFrame{
             }
         }
     }
+}
