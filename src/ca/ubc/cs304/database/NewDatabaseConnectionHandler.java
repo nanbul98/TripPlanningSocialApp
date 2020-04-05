@@ -489,8 +489,7 @@ public class NewDatabaseConnectionHandler {
 
         return result.toArray(new TravellerModel[result.size()]);
     }
-
-     */
+    
 
     public GroupModel[] getGroupsBasedOnInterest(String keyword) {
         ArrayList<GroupModel> result = new ArrayList<>();
