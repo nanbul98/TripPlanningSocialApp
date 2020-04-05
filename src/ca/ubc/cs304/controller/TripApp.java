@@ -195,6 +195,11 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         return dbHandler.viewAllUsers();
     }
 
+    @Override
+    public List<String[]> getTravellerInfoBasedOnTitle(String title) throws SQLException {
+        return dbHandler.getTravellerInfoBasedOnTitle(title);
+    }
+
 
     public void insertNewTraveller(TravellerModel travellerModel) {
         dbHandler.insertTraveller(travellerModel);

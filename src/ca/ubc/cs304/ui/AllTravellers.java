@@ -67,9 +67,27 @@ public class AllTravellers extends JFrame {
                 delegate.goToMainWindow();
             }
         });
+        // View Group in detail
+        JButton searchUserByName = new JButton("Search User By Name");
+        searchUserByName.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String res = promptInputSetUserInfo();
+                try {
+                    List<String[]> group = delegate.getTravellerInfoBasedOnTitle(res);
+                    displayResult(group, scrollPane);
+
+                } catch (Exception e) {
+                    //                   displayErrorMsg(e.getMessage());
+                    System.out.println("SQL Exception: " + e.getMessage());
+                }
+
+            }
+        });
 
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(viewAllUsersBtn);
+        menuBar.add(searchUserByName);
         menuBar.add(goToAddTravellers);
         menuBar.add(goToDeleteTravellers);
         menuBar.add(goBackMainWindow);
@@ -99,6 +117,27 @@ public class AllTravellers extends JFrame {
         jTable = new JTable(data, columnNames);
         jTable.setBounds(30, 40, 200, 300);
         scrollPane.setViewportView(jTable);
+    }
+
+    private String promptInputSetUserInfo() {
+        String res = null;
+        JTextField userTitle = new JTextField(5);
+
+
+        JPanel myPanel = new JPanel();
+        myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
+        myPanel.add(new JLabel("Search User by Name:"));
+        myPanel.add(userTitle);
+        myPanel.add(Box.createHorizontalStrut(10)); // a spacer
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Enter name", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            res = userTitle.getText();
+        }
+
+        System.out.println("GRAB SOETHING " + res);
+        return res;
     }
 
 //    public class MenuPane extends JPanel {

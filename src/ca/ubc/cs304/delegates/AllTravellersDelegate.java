@@ -8,5 +8,6 @@ public interface AllTravellersDelegate {
     void goDeleteTraveller();
     void goToMainWindow();
     public List<String[]> viewAllUsers() throws SQLException;
+    public List<String[]> getTravellerInfoBasedOnTitle(String title) throws SQLException;
 
 }
