@@ -91,10 +91,7 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
      * The TerminalTransaction instance tells us that the user is fine with dropping any existing table
      * called branch and creating a new one for this project to use
      */
-    public void databaseSetup() {
-        dbHandler.databaseSetup();;
 
-    }
 
     /**
      * Main method called at launch time
@@ -124,5 +121,10 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
     public List<String[]> viewAllGroups() throws SQLException {
         return dbHandler.viewAllGroups();
 
+    }
+
+    @Override
+    public List<String[]> getGroupInfo(int Group_ID) throws SQLException {
+        return dbHandler.getGroupInfo();
     }
 }

@@ -34,7 +34,6 @@ public class AllGroups extends JFrame {
         viewAllGroupsBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //String[] res = promptInputSetofAllGroups()
                 try {
                     List<String[]> res = delegate.viewAllGroups();
                     displayResult(res, scrollPane);
@@ -44,7 +43,23 @@ public class AllGroups extends JFrame {
             }
         });
 
+
+
         JButton viewGroupDetail = new JButton("Group Info");
+        viewGroupDetail.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int[] res = promptInputSetGroupInfo();
+                try {
+                    List<String[]> group = delegate.getGroupInfo(res[0]);
+                    displayResult(group, scrollPane);
+                } catch (Exception e) {
+ //                   displayErrorMsg(e.getMessage());
+//                    System.out.println("SQL Exception: " + e.getMessage());
+                }
+
+            }
+        });
 
 
 
@@ -120,6 +135,26 @@ public class AllGroups extends JFrame {
         jTable.setBounds(30, 40, 200, 300);
         scrollPane.setViewportView(jTable);
     }
+
+    private int[] promptInputSetGroupInfo() {
+        int[] res = new int[1];
+        JTextField Group_ID = new JTextField(5);
+
+
+        JPanel myPanel = new JPanel();
+        myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
+        myPanel.add(new JLabel("Group ID:"));
+        myPanel.add(Group_ID);
+        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Which group would you like to view", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            res[0] = Group_ID.getColumns();
+        }
+        return res;
+    }
+
 
 
 }

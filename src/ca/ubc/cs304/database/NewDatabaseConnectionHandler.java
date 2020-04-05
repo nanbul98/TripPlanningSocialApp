@@ -94,10 +94,6 @@ public class NewDatabaseConnectionHandler {
 
     }
 
-    public void databaseSetup() {
-
-    }
-
 
     public void deleteUser(TravellerModel user) {
         try {
@@ -145,23 +141,19 @@ public class NewDatabaseConnectionHandler {
     //Viewing all Groups table
     public List<String[]> viewAllGroups() throws SQLException{
         List<String[]> res = new ArrayList<>();
-        String[] colName = {"GroupID","Title","Description","Owner"};
+        String[] colName = {"Group_ID","Title","Description","Owner_Username"};
         res.add(colName);
 
         try {
-            String sql = "SELECT * FROM traveller_group";
-            PreparedStatement prepState;
-            prepState = connection.prepareStatement(sql);
-            //PreparedStatement stmt = connection.createStatement();
-            //ResultSet rs = stmt.executeQuery("SELECT * FROM traveller_group");
+            Statement prepState = connection.createStatement();
+            ResultSet rs = prepState.executeQuery("SELECT * FROM traveller_group");
 
-            ResultSet rs = prepState.executeQuery();
             while (rs.next()) {
                 String[] row = new String[colName.length];
-                row[0] = rs.getString("GroupID");
+                row[0] = rs.getString("Group_ID");
                 row[1] = rs.getString("Title");
                 row[2] = rs.getString("Description");
-                row[3] = rs.getString("Owner");
+                row[3] = rs.getString("Owner_Username");
                 res.add(row);
             }
         } catch (SQLException e) {
@@ -170,6 +162,32 @@ public class NewDatabaseConnectionHandler {
         }
         return res;
     }
+
+    //Viewing specific group of choice by Group_ID
+    public List<String[]> getGroupInfo() throws SQLException{
+        List<String[]> res = new ArrayList<>();
+        String[] colName = {"Group_ID","Title","Description","Owner_Username"};
+        res.add(colName);
+
+        try {
+            Statement prepState = connection.createStatement();
+            ResultSet rs = prepState.executeQuery("SELECT * FROM traveller_group WHERE Group_ID = ?");
+
+            while (rs.next()) {
+                String[] row = new String[colName.length];
+                row[0] = rs.getString("Group_ID");
+                row[1] = rs.getString("Title");
+                row[2] = rs.getString("Description");
+                row[3] = rs.getString("Owner_Username");
+                res.add(row);
+            }
+        } catch (SQLException e) {
+            rollbackConnection();
+            throw e;
+        }
+        return res;
+    }
+
 
 
 
