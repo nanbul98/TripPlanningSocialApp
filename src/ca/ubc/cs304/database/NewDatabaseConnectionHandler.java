@@ -7,11 +7,15 @@ import ca.ubc.cs304.model.GroupModel;
 import ca.ubc.cs304.model.TravellerModel;
 //import ca.ubc.cs304.model.UserModel;
 
+import javax.swing.*;
+import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 public class NewDatabaseConnectionHandler {
     // Use this version of the ORACLE_URL if you are running the code off of the server
@@ -136,24 +140,22 @@ public class NewDatabaseConnectionHandler {
     }
 
 
-    //queries related to Group
+    // TODO queries related to Group
 
     //Viewing all Groups table
     public List<String[]> viewAllGroups() throws SQLException{
         List<String[]> res = new ArrayList<>();
-        String[] colName = {"Group_ID","Title","Description","Owner_Username"};
+        String[] colName = {"Group_ID","Title"};
         res.add(colName);
 
         try {
             Statement prepState = connection.createStatement();
-            ResultSet rs = prepState.executeQuery("SELECT * FROM traveller_group");
+            ResultSet rs = prepState.executeQuery("SELECT Group_ID,Title FROM traveller_group");
 
             while (rs.next()) {
                 String[] row = new String[colName.length];
                 row[0] = rs.getString("Group_ID");
                 row[1] = rs.getString("Title");
-                row[2] = rs.getString("Description");
-                row[3] = rs.getString("Owner_Username");
                 res.add(row);
             }
         } catch (SQLException e) {
@@ -163,15 +165,25 @@ public class NewDatabaseConnectionHandler {
         return res;
     }
 
-    //Viewing specific group of choice by Group_ID
-    public List<String[]> getGroupInfo() throws SQLException{
+    //Viewing specific group of choice by groupTitle
+    public List<String[]> getGroupInfo(String groupTitle) throws SQLException{
         List<String[]> res = new ArrayList<>();
         String[] colName = {"Group_ID","Title","Description","Owner_Username"};
         res.add(colName);
 
+
         try {
             Statement prepState = connection.createStatement();
-            ResultSet rs = prepState.executeQuery("SELECT * FROM traveller_group WHERE Group_ID = ?");
+
+            String sql = "SELECT * FROM traveller_group WHERE Title = '" + groupTitle + "\'";
+            /*
+            if (!groupTitle.equals("")) {
+                sql += " WHERE Title = '" + groupTitle + "\'";
+            }
+             */
+            prepState = connection.prepareStatement(sql);
+
+            ResultSet rs = prepState.executeQuery(sql);
 
             while (rs.next()) {
                 String[] row = new String[colName.length];
@@ -183,11 +195,238 @@ public class NewDatabaseConnectionHandler {
             }
         } catch (SQLException e) {
             rollbackConnection();
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             throw e;
         }
         return res;
     }
 
+    // find the total number of people in a group
+    public int countAllMember (String groupID) throws SQLException {
+        int intGroupID = Integer.parseInt(groupID);
+        int count = 0;
+
+        try {
+            String sql = "SELECT COUNT(*) AS total \n" +
+                    "FROM traveller T, trav_group_member_travellers G\n" +
+                    "WHERE T.username = G.username\n" +
+                    "GROUP BY G.group_id\n" +
+                    "HAVING G.group_id = '" + intGroupID + "\'";
+
+            PreparedStatement prepState;
+            prepState = connection.prepareStatement(sql);
+
+            ResultSet rs = prepState.executeQuery();
+            while (rs.next()) {
+                count = rs.getInt("total");
+            }
+
+
+        } catch (Exception e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return count;
+
+    }
+
+    // view all the members in a group
+    public List<String[]> viewAllGroupMembers (String groupID) {
+        int intGroupID = Integer.parseInt(groupID);
+        List<String[]> mem = new ArrayList<>();
+        String[] colName = {"Username","Name","Country","City","Gender","Birthdate"};
+        mem.add(colName);
+
+        System.out.println("view members in" + intGroupID);
+
+        try {
+            String sql = "SELECT DISTINCT T.Username, T.Name, T.Country, T.City, T.Gender, T.Birthdate\n" +
+                    "FROM traveller T, trav_group_member_travellers G\n" +
+                    "WHERE T.Username = G.Username AND G.group_id = '" + intGroupID + "\'";
+
+            PreparedStatement prepState;
+            prepState = connection.prepareStatement(sql);
+            ResultSet rs = prepState.executeQuery();
+            while (rs.next()) {
+                String[] row = new String[colName.length];
+                row[0] = rs.getString("Username");
+                row[1] = rs.getString("Name");
+                row[2] = rs.getString("Country");
+                row[3] = rs.getString("City");
+                row[4] = rs.getString("Gender");
+                row[5] = rs.getString("Birthdate");
+                mem.add(row);
+            }
+
+        } catch (Exception e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return mem;
+    }
+
+    /*
+    //  find the superstar member
+    public List<String[]> findSuperStar (String groupID) throws SQLException {
+        int intGroupID = Integer.parseInt(groupID);
+        List<String[]> mem = new ArrayList<>();
+        String[] colName = {"Name"};
+        mem.add(colName);
+
+
+        try {
+
+            String dropView = "DROP VIEW trips_from_specific_group";
+
+            String view = "CREATE VIEW trips_from_specific_group AS\n" +
+                    "SELECT * FROM trav_grp_trip WHERE group_ID = '" + intGroupID + "\'";
+
+
+            String sql = "SELECT U.name FROM traveller U WHERE NOT exists\n" +
+                    "(SELECT * from trips_from_specific_group T where not exists\n" +
+                    "(SELECT G.username FROM trav_group_member_travellers G WHERE U.username = G.username AND T.Group_ID  = G.Group_ID))";
+
+
+            PreparedStatement prepState2 = connection.prepareStatement(view);
+            //prepState2.executeQuery();
+            PreparedStatement prepState = connection.prepareStatement(sql);
+            System.out.println("find superstar members in group " + intGroupID);
+            ResultSet rs = prepState.executeQuery();
+            while (rs.next()) {
+                String[] row = new String[colName.length];
+                row[0] = rs.getString("Name");
+                mem.add(row);
+            }
+
+        } catch (Exception e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return mem;
+    }
+    */
+
+    // view all trips of a group
+    public List<String[]> viewGroupTrips (String groupID) {
+        int intGroupID = Integer.parseInt(groupID);
+        List<String[]> mem = new ArrayList<>();
+        String[] colName = {"Trip_ID","Meeting_Location","Title","Group_Limit","Trip_Cost","Currency","Description", "Start_Date","End_Date"};
+        mem.add(colName);
+
+        System.out.println("view trips in group " + intGroupID);
+
+        try {
+            String sql = "SELECT Trip_ID, Meeting_Location, Title, Group_Limit, Trip_Cost, Currency, Description, Start_Date, End_Date\n" +
+                    "FROM trav_grp_trip\n" +
+                    "WHERE Group_ID = '" + intGroupID + "\'";
+
+            PreparedStatement prepState;
+            prepState = connection.prepareStatement(sql);
+            ResultSet rs = prepState.executeQuery();
+            while (rs.next()) {
+                String[] row = new String[colName.length];
+                row[0] = rs.getString("Trip_ID");
+                row[1] = rs.getString("Meeting_Location");
+                row[2] = rs.getString("Title");
+                row[3] = rs.getString("Group_Limit");
+                row[4] = rs.getString("Trip_Cost");
+                row[5] = rs.getString("Currency");
+                row[6] = rs.getString("Description");
+                row[7] = rs.getString("Start_Date");
+                row[8] = rs.getString("End_Date");
+                mem.add(row);
+            }
+
+        } catch (Exception e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return mem;
+    }
+
+    // TODO view all activities of group
+    public List<String[]> viewTripActivity (String groupID, String tripID) {
+        int intGroupID = Integer.parseInt(groupID);
+        int intTripID = Integer.parseInt(tripID);
+
+        List<String[]> mem = new ArrayList<>();
+        String[] colName = {"Activity_ID","Meeting_Location","Title","Activity_Cost","Description", "Start_Date","End_Date"};
+        mem.add(colName);
+
+        System.out.println("view trips in group " + intGroupID);
+
+        try {
+            String sql = "SELECT A.Activity_ID, A.Meeting_Location, A.Title, A.Activity_Cost, A.Description, A.Start_Date, A.End_Date\n" +
+                    "FROM trav_grp_trip T, trav_grp_trp_activity A\n" +
+                    "WHERE T.Group_ID = '" + intGroupID + "\' AND A.Trip_ID = '" + intTripID + "\'";
+
+            PreparedStatement prepState;
+            prepState = connection.prepareStatement(sql);
+            ResultSet rs = prepState.executeQuery();
+            while (rs.next()) {
+                String[] row = new String[colName.length];
+                row[0] = rs.getString("Activity_ID");
+                row[1] = rs.getString("Meeting_Location");
+                row[2] = rs.getString("Title");
+                row[3] = rs.getString("Activity_Cost");
+                row[4] = rs.getString("Description");
+                row[5] = rs.getString("Start_Date");
+                row[6] = rs.getString("End_Date");
+                mem.add(row);
+            }
+
+        } catch (Exception e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return mem;
+    }
+
+    // TODO find all the trips with activities that are ALL free
+    public List<String[]> findTripWithAllFreeAct() throws SQLException{
+        List<String[]> res = new ArrayList<>();
+        String[] colName = {"Trip_ID"};
+        res.add(colName);
+
+        try {
+            Statement prepState = connection.createStatement();
+            ResultSet rs = prepState.executeQuery("");
+
+            while (rs.next()) {
+                String[] row = new String[colName.length];
+                row[0] = rs.getString("Trip_ID");
+                //row[1] = rs.getString("Title");
+                res.add(row);
+            }
+        } catch (SQLException e) {
+            rollbackConnection();
+            throw e;
+        }
+        return res;
+    }
+    
+
+        public List<String[]> searchGroupMember (int groupID, String name) {
+        List<String[]> mem = new ArrayList<>();
+        String[] colName = {"Username", "Name", "Location", "Gender", "Birthdate"};
+        mem.add(colName);
+        try {
+            String sql = "SELECT DISTINCT Username, Name, City, Gender, Birthdate\n" +
+                    "FROM traveller T, group_member_travellers G\n" +
+                    "WHERE G.group_id = ? AND T.name = ?";
+            PreparedStatement prepState;
+            prepState = connection.prepareStatement(sql);
+            prepState.setString(1, name);
+            ResultSet rs = prepState.executeQuery();
+            while (rs.next()) {
+                String[] row = new String[colName.length];
+                row[0] = rs.getString("Username");
+                row[1] = rs.getString("City");
+                row[2] = rs.getString("Gender");
+                row[3] = rs.getString("Birthdate");
+                mem.add(row);
+            }
+
+        } catch (Exception e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return mem;
+    }
 
 
 
@@ -212,7 +451,7 @@ public class NewDatabaseConnectionHandler {
         }
     }
 
-
+    /*
     public BusinessModel[] getBusinessInfoBasedOnTitle(String title) {
         ArrayList<BusinessModel> result = new ArrayList<>();
         try {
@@ -238,6 +477,8 @@ public class NewDatabaseConnectionHandler {
 
         return result.toArray(new BusinessModel[result.size()]);
     }
+
+     */
 
     public GroupModel[] getGroupsBasedOnInterest(String keyword) {
         ArrayList<GroupModel> result = new ArrayList<>();
@@ -267,34 +508,6 @@ public class NewDatabaseConnectionHandler {
 
 
 
-    public List<String[]> searchGroupMember (int groupID, String name) {
-        List<String[]> mem = new ArrayList<>();
-        String[] colName = {"Username", "Name", "Location", "Gender", "Birthdate"};
-        mem.add(colName);
-        try {
-            String sql = "SELECT DISTINCT Username, Name, City, Gender, Birthdate\n" +
-                    "FROM traveller T, group_member_travellers G\n" +
-                    "WHERE G.group_id = ? AND T.name = ?";
-            PreparedStatement prepState;
-            prepState = connection.prepareStatement(sql);
-            prepState.setString(1, name);
-            ResultSet rs = prepState.executeQuery();
-            while (rs.next()) {
-                String[] row = new String[colName.length];
-                row[0] = rs.getString("Username");
-                row[1] = rs.getString("City");
-                row[2] = rs.getString("Gender");
-                row[3] = rs.getString("Birthdate");
-                mem.add(row);
-            }
-
-        } catch (Exception e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-        return mem;
-    }
-
-
     public int getAverageTripActivitiesPerGroup() {
         int result = 0;
         try {
@@ -314,52 +527,6 @@ public class NewDatabaseConnectionHandler {
 
         return result;
     }
-
-    public int countAllGroupMember (int groupID) {
-        int count = 0;
-
-        try {
-            String sql = "SELECT COUNT(*) AS total \n" +
-                         "FROM traveller T, trav_group_member_travellers G\n" +
-                         "WHERE T.username = G.username\n" +
-                         "GROUP BY G.group_id\n" +
-                         "HAVING G.group_id = ?";
-
-            PreparedStatement prepState;
-            prepState = connection.prepareStatement(sql);
-
-            ResultSet rs = prepState.executeQuery();
-            while (rs.next()) {
-                count = rs.getInt("total");
-            }
-
-
-        } catch (Exception e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-        return count;
-    }
-
-
-    public List<String[]> findStarMember (int groupID) {
-        List<String[]> mem = new ArrayList<>();
-        String[] colName = {"Username", "Name", "Location", "Gender", "Birthdate"};
-        mem.add(colName);
-        try {
-            String sql = "CREATE VIEW trips_from_specific_group AS\n" +
-                    "SELECT * FROM trav_grp_trip WHERE group_ID";
-            String sql2 = "SELECT u.name FROM traveller u WHERE not exists\n" +
-                          "(SELECT * from trips_from_specific_group t where not exists\n" +
-                          "(SELECT g.username FROM TRAV_GROUP_MEMBER_TRAVELLERS g where u.username = g.username AND t.Group_ID  = g.Group_ID))";
-
-        // TODO need to finish the code later
-
-        } catch (Exception e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-        return mem;
-    }
-
 
 
 

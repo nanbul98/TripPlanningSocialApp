@@ -7,6 +7,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Statement;
 import java.util.List;
 
 public class AllGroups extends JFrame {
@@ -29,6 +30,8 @@ public class AllGroups extends JFrame {
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         textArea.setEditable(false);
 
+
+
         //Creating the MenuBar and adding components
         JButton viewAllGroupsBtn = new JButton("View All Groups");
         viewAllGroupsBtn.addActionListener(new ActionListener() {
@@ -37,81 +40,165 @@ public class AllGroups extends JFrame {
                 try {
                     List<String[]> res = delegate.viewAllGroups();
                     displayResult(res, scrollPane);
+
                 } catch (Exception e) {
                     //displayErrorMsg(e.getMessage());
+                    System.out.println("SQL Exception: " + e.getMessage());
                 }
             }
         });
 
 
-
+        // View Group in detail
         JButton viewGroupDetail = new JButton("Group Info");
         viewGroupDetail.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                int[] res = promptInputSetGroupInfo();
+                String res = promptInputSetGroupInfo();
                 try {
-                    List<String[]> group = delegate.getGroupInfo(res[0]);
+                    List<String[]> group = delegate.getGroupInfo(res);
                     displayResult(group, scrollPane);
+
                 } catch (Exception e) {
  //                   displayErrorMsg(e.getMessage());
+                    System.out.println("SQL Exception: " + e.getMessage());
+                }
+
+            }
+        });
+
+        // View Group Members in detail - member count, view in detail
+        JButton viewGroupMembers = new JButton("View Group Members");
+        viewGroupMembers.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String res = promptInputSetGroupMember();
+                try {
+                    // Shows total num of member in the group
+                    int count = delegate.countAllMember(res);
+                    System.out.println("Counted all the members " + count);
+                    JPanel myPanel = new JPanel();
+                    myPanel.add(new JLabel("Total Num of Group Member: " + count));
+
+                    // Detailed view of the group
+                    JButton showDetails = new JButton("Details");
+                    myPanel.add(showDetails);
+
+                    showDetails.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            List<String[]> members = delegate.viewAllGroupMembers(res);
+                            displayResult(members, scrollPane);
+
+                        }
+                    });
+
+                    scrollPane.setViewportView(myPanel);
+
+                } catch (Exception e) {
+                    //displayErrorMsg(e.getMessage());
 //                    System.out.println("SQL Exception: " + e.getMessage());
+                }
+            }
+        });
+
+        // Find the superstars (member who have will or have been on ALL trips)
+        JButton findSuperStar = new JButton("**Find SUPERSTAR**");
+        findSuperStar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String res = promptInputSetGroupMember();
+                try {
+                    List<String[]> group = delegate.findSuperStar(res);
+                    displayResult(group, scrollPane);
+
+                } catch (Exception e) {
+                    //                   displayErrorMsg(e.getMessage());
+                    System.out.println("SQL Exception: " + e.getMessage());
+                }
+
+            }
+        });
+
+        // View trip's all trips
+        JButton viewGroupTrips = new JButton("View Trips");
+        viewGroupTrips.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String res = promptInputSetGroupMember();
+                try {
+                    List<String[]> group = delegate.viewGroupTrips(res);
+                    displayResult(group, scrollPane);
+
+                } catch (Exception e) {
+                    //                   displayErrorMsg(e.getMessage());
+                    System.out.println("SQL Exception: " + e.getMessage());
                 }
 
             }
         });
 
 
+        // View trips's all activity
+        JButton viewTripActiviy = new JButton("View Activities");
+        viewTripActiviy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String[] res = promptInputSetActivity();
+                try {
+                    List<String[]> group = delegate.viewTripActivity(res[0], res[1]);
+                    displayResult(group, scrollPane);
+
+                } catch (Exception e) {
+                    //                   displayErrorMsg(e.getMessage());
+                    System.out.println("SQL Exception: " + e.getMessage());
+                }
+
+            }
+        });
+
+        // Find trip with all free activities
+        JButton tripWithFreeActivites = new JButton("Trips with ALL FREE activities");
+        tripWithFreeActivites.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                //String[] res = promptInputSetActivity();
+                try {
+                    List<String[]> group = delegate.findTripWithAllFreeAct();
+                    displayResult(group, scrollPane);
+
+                } catch (Exception e) {
+                    //                   displayErrorMsg(e.getMessage());
+                    System.out.println("SQL Exception: " + e.getMessage());
+                }
+
+            }
+        });
 
 
         // Create the menu bar
         JMenuBar menuBar = new JMenuBar();
+        JMenuBar menubarBottom = new JMenuBar();
         //menuBar.setOpaque(true);
         //menuBar.setPreferredSize(new Dimension(1000, 30));
 
 
         menuBar.add(viewAllGroupsBtn);
         menuBar.add(viewGroupDetail);
-        //menuBar.add(interestsMenu);
-
+        menuBar.add(viewGroupMembers);
+        //menuBar.add(findSuperStar);
+        menubarBottom.add(viewGroupTrips);
+        menubarBottom.add(viewTripActiviy);
+        menubarBottom.add(tripWithFreeActivites);
 
 
         this.getContentPane().add(BorderLayout.NORTH, menuBar);
         this.getContentPane().add(BorderLayout.CENTER, scrollPane);
+        this.getContentPane().add(BorderLayout.SOUTH, menubarBottom);
         this.setVisible(true);
 
     }
 
-
-
-    /*
-    public class MenuPane extends JPanel implements ActionListener {
-
-        public MenuPane() {
-            setBorder(new EmptyBorder(300, 300, 300, 300));
-            setLayout(new GridBagLayout());
-
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridwidth = GridBagConstraints.REMAINDER;
-            gbc.anchor = GridBagConstraints.NORTH;
-
-            add(new JLabel("<html><h2><strong>List of All Groupss</strong></h2><hr></html>"), gbc);
-
-            gbc.anchor = GridBagConstraints.CENTER;
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-
-
-
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-        }
-
-
-    }
-     */
 
 
     private void displayResult(List<String[]> res, JScrollPane scrollPane) {
@@ -136,24 +223,78 @@ public class AllGroups extends JFrame {
         scrollPane.setViewportView(jTable);
     }
 
-    private int[] promptInputSetGroupInfo() {
-        int[] res = new int[1];
-        JTextField Group_ID = new JTextField(5);
+    private String promptInputSetGroupInfo() {
+        String res = null;
+        JTextField groupTitle = new JTextField(5);
 
 
         JPanel myPanel = new JPanel();
         myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
-        myPanel.add(new JLabel("Group ID:"));
-        myPanel.add(Group_ID);
-        myPanel.add(Box.createHorizontalStrut(15)); // a spacer
+        myPanel.add(new JLabel("Group Title:"));
+        myPanel.add(groupTitle);
+        myPanel.add(Box.createHorizontalStrut(10)); // a spacer
 
         int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Which group would you like to view", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                "Which group?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            res[0] = Group_ID.getColumns();
+            res = groupTitle.getText();
         }
+
+        System.out.println("GRAB SOETHING " + res);
         return res;
     }
+
+
+    private String promptInputSetGroupMember() {
+        String res = null;
+        JTextField groupID = new JTextField(5);
+
+
+        JPanel myPanel = new JPanel();
+        myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
+        myPanel.add(new JLabel("Group ID: "));
+        myPanel.add(groupID);
+        myPanel.add(Box.createHorizontalStrut(10)); // a spacer
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Which group?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            res = groupID.getText();
+        }
+
+        System.out.println("GRAB SOETHING " + res);
+        return res;
+    }
+    private String[] promptInputSetActivity() {
+        String[] res = new String[2];
+        JTextField groupID = new JTextField(5);
+        JTextField tripID = new JTextField(5);
+
+
+        JPanel myPanel = new JPanel();
+        myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
+        myPanel.add(new JLabel("Group ID: "));
+        myPanel.add(groupID);
+        myPanel.add(Box.createHorizontalStrut(10)); // a spacer
+        myPanel.add(new JLabel("Trip ID: "));
+        myPanel.add(tripID);
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Which group?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            res[0] = groupID.getText();
+            res[1] = tripID.getText();
+        }
+
+        System.out.println("GRAB SOETHING " + res);
+        return res;
+    }
+
+
+
+
+
+
 
 
 

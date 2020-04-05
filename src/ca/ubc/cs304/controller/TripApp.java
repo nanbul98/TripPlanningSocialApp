@@ -124,7 +124,37 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
     }
 
     @Override
-    public List<String[]> getGroupInfo(int Group_ID) throws SQLException {
-        return dbHandler.getGroupInfo();
+    public List<String[]> getGroupInfo(String groupTitle) throws SQLException {
+        return dbHandler.getGroupInfo(groupTitle);
     }
+
+    @Override
+    public int countAllMember(String groupID) throws SQLException {
+        return dbHandler.countAllMember(groupID);
+    }
+
+    @Override
+    public List<String[]> viewAllGroupMembers(String groupID){
+        return dbHandler.viewAllGroupMembers(groupID);
+    }
+
+    @Override
+    public List<String[]> findSuperStar(String groupID) throws SQLException{
+        return dbHandler.findSuperStar(groupID);
+    }
+    @Override
+    public List<String[]> viewGroupTrips(String groupID) throws SQLException{
+        return dbHandler.viewGroupTrips(groupID);
+    }
+    @Override
+    public List<String[]> viewTripActivity(String groupID, String tripID) throws SQLException{
+        return dbHandler.viewTripActivity(groupID, tripID);
+    }
+
+    @Override
+    public List<String[]> findTripWithAllFreeAct() throws SQLException {
+        return dbHandler.findTripWithAllFreeAct();
+    }
+
+
 }
