@@ -1,13 +1,13 @@
 create table supported_currency
 (
-    Code char(3), -- ISO 4217
+    Code varchar(3), -- ISO 4217
     primary key (Code)
 );
 
 create table country_display_currency
 (
-    Country  char(35),
-    Currency char(3),
+    Country  varchar(35),
+    Currency varchar(3),
     primary key (Country),
     foreign key (Currency) references supported_currency (Code)
         on delete set null
@@ -15,12 +15,12 @@ create table country_display_currency
 
 create table traveller
 (
-    Username  char(15),
-    Name      char(35),
-    Country   char(35),
-    Province  char(35),
-    City      char(35),
-    Gender    char(5),
+    Username  varchar(15),
+    Name      varchar(35),
+    Country   varchar(35),
+    Province  varchar(35),
+    City      varchar(35),
+    Gender    varchar(5),
     Birthdate date,
     primary key (Username),
     foreign key (Country) references country_display_currency
@@ -29,11 +29,11 @@ create table traveller
 
 create table business
 (
-    Username char(15),
-    Name     char(35),
-    Country  char(35),
-    Province char(35),
-    City     char(35),
+    Username varchar(15),
+    Name     varchar(35),
+    Country  varchar(35),
+    Province varchar(35),
+    City     varchar(35),
     primary key (Username),
     foreign key (Country) references country_display_currency
         on delete set null
@@ -41,8 +41,8 @@ create table business
 
 create table traveller_bucket_lists
 (
-    Username char(15),
-    Title    char(35),
+    Username varchar(15),
+    Title    varchar(35),
     primary key (Username, Title),
     foreign key (Username) references traveller
         on delete cascade
@@ -50,16 +50,16 @@ create table traveller_bucket_lists
 
 create table interest
 (
-    Name        char(35),
+    Name        varchar(35),
     Description varchar(150 char),
     primary key (Name)
 );
 
 create table bucket_list_interests
 (
-    Username          char(15),
-    Bucket_List_Title char(35),
-    Interest_Name     char(35),
+    Username          varchar(15),
+    Bucket_List_Title varchar(35),
+    Interest_Name     varchar(35),
     primary key (Username, Bucket_List_Title, Interest_Name),
     foreign key (Username, Bucket_List_Title) references traveller_bucket_lists (Username, Title)
         on delete cascade,
@@ -70,9 +70,9 @@ create table bucket_list_interests
 create table traveller_group
 (
     Group_ID       integer,
-    Title          char(35),
+    Title          varchar(35),
     Description    varchar(150 char),
-    Owner_Username char(15),
+    Owner_Username varchar(15),
     primary key (Group_ID),
     foreign key (Owner_Username) references traveller (Username)
         on delete cascade
@@ -81,9 +81,9 @@ create table traveller_group
 create table business_group
 (
     Group_ID       integer,
-    Title          char(35),
+    Title          varchar(35),
     Description    varchar(150 char),
-    Owner_Username char(15),
+    Owner_Username varchar(15),
     primary key (Group_ID),
     foreign key (Owner_Username) references business (Username)
         on delete cascade
@@ -92,7 +92,7 @@ create table business_group
 create table trav_group_member_travellers
 (
     Group_ID integer,
-    Username char(15),
+    Username varchar(15),
     primary key (Group_ID, Username),
     foreign key (Group_ID) references traveller_group
         on delete cascade,
@@ -103,7 +103,7 @@ create table trav_group_member_travellers
 create table bus_group_member_travellers
 (
     Group_ID integer,
-    Username char(15),
+    Username varchar(15),
     primary key (Group_ID, Username),
     foreign key (Group_ID) references business_group
         on delete cascade,
@@ -114,7 +114,7 @@ create table bus_group_member_travellers
 create table trav_group_member_businesses
 (
     Group_ID integer,
-    Username char(15),
+    Username varchar(15),
     primary key (Group_ID, Username),
     foreign key (Group_ID) references traveller_group
         on delete cascade,
@@ -125,7 +125,7 @@ create table trav_group_member_businesses
 create table bus_group_member_businesses
 (
     Group_ID integer,
-    Username char(15),
+    Username varchar(15),
     primary key (Group_ID, Username),
     foreign key (Group_ID) references business_group
         on delete cascade,
@@ -136,7 +136,7 @@ create table bus_group_member_businesses
 create table trav_group_interests
 (
     Group_ID      integer,
-    Interest_Name char(35),
+    Interest_Name varchar(35),
     primary key (Group_ID, Interest_Name),
     foreign key (Group_ID) references traveller_group
         on delete cascade,
@@ -147,7 +147,7 @@ create table trav_group_interests
 create table bus_group_interests
 (
     Group_ID      integer,
-    Interest_Name char(35),
+    Interest_Name varchar(35),
     primary key (Group_ID, Interest_Name),
     foreign key (Group_ID) references business_group
         on delete cascade,
@@ -160,10 +160,10 @@ create table trav_grp_trip
     Trip_ID          integer,
     Group_ID         integer not null,
     Meeting_Location varchar(150 char),
-    Title            char(35),
+    Title            varchar(35),
     Group_Limit      integer,
     Trip_Cost        number,
-    Currency         char(3) not null,
+    Currency         varchar(3) not null,
     Description      varchar(150 char),
     Start_Date       date,
     End_Date         date,
@@ -178,10 +178,10 @@ create table bus_grp_trip
     Trip_ID          integer,
     Group_ID         integer not null,
     Meeting_Location varchar(150 char),
-    Title            char(35),
+    Title            varchar(35),
     Group_Limit      integer,
     Trip_Cost        number,
-    Currency         char(3) not null,
+    Currency         varchar(3) not null,
     Description      varchar(150 char),
     Start_Date       date,
     End_Date         date,
@@ -196,7 +196,7 @@ create table trav_grp_trp_activity
     Activity_ID      integer,
     Trip_ID          integer not null,
     Meeting_Location varchar(150 char),
-    Title            char(35),
+    Title            varchar(35),
     Activity_Cost    number,
     Description      varchar(150 char),
     Start_Date       date,
@@ -219,7 +219,7 @@ create table bus_grp_trp_activity
     Activity_ID      integer,
     Trip_ID          integer not null,
     Meeting_Location varchar(150 char),
-    Title            char(35),
+    Title            varchar(35),
     Activity_Cost    number,
     Description      varchar(150 char),
     Start_Date       date,
@@ -231,8 +231,8 @@ create table bus_grp_trp_activity
 
 create table trav_group_sponsored_deals
 (
-    Promo_Code        char(100),
-    Business_Username char(15)        not null,
+    Promo_Code        varchar(100),
+    Business_Username varchar(15)        not null,
     Group_ID          integer not null,
     Condition         varchar(150 char),
     Deal              varchar(150 char),
@@ -245,8 +245,8 @@ create table trav_group_sponsored_deals
 
 create table bus_grp_sponsored_deals
 (
-    Promo_Code        char(100),
-    Business_Username char(15)        not null,
+    Promo_Code        varchar(100),
+    Business_Username varchar(15)        not null,
     Group_ID          integer not null,
     Condition         varchar(150 char),
     Deal              varchar(150 char),
@@ -260,7 +260,7 @@ create table bus_grp_sponsored_deals
 create table trav_grp_trip_interests
 (
     Trip_ID       integer,
-    Interest_Name char(35),
+    Interest_Name varchar(35),
     primary key (Trip_ID, Interest_Name),
     foreign key (Trip_ID) references trav_grp_trip
         on delete cascade,
@@ -271,7 +271,7 @@ create table trav_grp_trip_interests
 create table bus_grp_trip_interests
 (
     Trip_ID       integer,
-    Interest_Name char(35),
+    Interest_Name varchar(35),
     primary key (Trip_ID, Interest_Name),
     foreign key (Trip_ID) references bus_grp_trip
         on delete cascade,
@@ -282,10 +282,10 @@ create table bus_grp_trip_interests
 create table trav_grp_trp_traveller_forum_posts
 (
     Post_ID         integer,
-    Title           char(35),
+    Title           varchar(35),
     Body            varchar(150 char),
     Time_Posted     timestamp,
-    Author_Username char(15),
+    Author_Username varchar(15),
     Trip_ID         integer not null,
     primary key (Post_ID),
     foreign key (Author_Username) references traveller (Username)
@@ -297,10 +297,10 @@ create table trav_grp_trp_traveller_forum_posts
 create table bus_grp_trp_traveller_forum_posts
 (
     Post_ID         integer,
-    Title           char(35),
+    Title           varchar(35),
     Body            varchar(150 char),
     Time_Posted     timestamp,
-    Author_Username char(15),
+    Author_Username varchar(15),
     Trip_ID         integer not null,
     primary key (Post_ID),
     foreign key (Author_Username) references traveller (Username)
@@ -312,10 +312,10 @@ create table bus_grp_trp_traveller_forum_posts
 create table trav_grp_trp_business_forum_posts
 (
     Post_ID         integer,
-    Title           char(35),
+    Title           varchar(35),
     Body            varchar(150 char),
     Time_Posted     timestamp,
-    Author_Username char(15),
+    Author_Username varchar(15),
     Trip_ID         integer not null,
     primary key (Post_ID),
     foreign key (Author_Username) references business (Username)
@@ -327,10 +327,10 @@ create table trav_grp_trp_business_forum_posts
 create table bus_grp_trp_business_forum_posts
 (
     Post_ID         integer,
-    Title           char(35),
+    Title           varchar(35),
     Body            varchar(150 char),
     Time_Posted     timestamp,
-    Author_Username char(15),
+    Author_Username varchar(15),
     Trip_ID         integer not null,
     primary key (Post_ID),
     foreign key (Author_Username) references business (Username)
@@ -345,7 +345,7 @@ create table trav_grp_trp_trav_post_traveller_comments
     Comment_ID      integer,
     Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(15),
+    Author_Username varchar(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references trav_grp_trp_traveller_forum_posts
         on delete cascade,
@@ -359,7 +359,7 @@ create table bus_grp_trp_trav_post_traveller_comments
     Comment_ID      integer,
     Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(15),
+    Author_Username varchar(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references bus_grp_trp_traveller_forum_posts
         on delete cascade,
@@ -373,7 +373,7 @@ create table trav_grp_trp_trav_post_business_comments
     Comment_ID      integer,
     Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(15),
+    Author_Username varchar(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references trav_grp_trp_traveller_forum_posts
         on delete cascade,
@@ -387,7 +387,7 @@ create table bus_grp_trp_trav_post_business_comments
     Comment_ID      integer,
     Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(15),
+    Author_Username varchar(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references bus_grp_trp_traveller_forum_posts
         on delete cascade,
@@ -401,7 +401,7 @@ create table trav_grp_trp_bus_post_traveller_comments
     Comment_ID      integer,
     Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(15),
+    Author_Username varchar(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references trav_grp_trp_business_forum_posts
         on delete cascade,
@@ -415,7 +415,7 @@ create table bus_grp_trp_bus_post_traveller_comments
     Comment_ID      integer,
     Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(15),
+    Author_Username varchar(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references bus_grp_trp_business_forum_posts
         on delete cascade,
@@ -429,7 +429,7 @@ create table trav_grp_trp_bus_post_business_comments
     Comment_ID      integer,
     Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(15),
+    Author_Username varchar(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references trav_grp_trp_business_forum_posts
         on delete cascade,
@@ -443,7 +443,7 @@ create table bus_grp_trp_bus_post_business_comments
     Comment_ID      integer,
     Body            varchar(150 char),
     Time_Commented  timestamp,
-    Author_Username char(15),
+    Author_Username varchar(15),
     primary key (Post_ID, Comment_ID),
     foreign key (Post_ID) references bus_grp_trp_business_forum_posts
         on delete cascade,

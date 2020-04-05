@@ -1,19 +1,16 @@
 package ca.ubc.cs304.database;
 
 
-import ca.ubc.cs304.model.*;
-import ca.ubc.cs304.model.BusinessModel;
 import ca.ubc.cs304.model.GroupModel;
 import ca.ubc.cs304.model.TravellerModel;
-//import ca.ubc.cs304.model.UserModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+//import ca.ubc.cs304.model.UserModel;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -99,44 +96,57 @@ public class NewDatabaseConnectionHandler {
     }
 
 
-    public void deleteUser(TravellerModel user) {
+    public void deleteUser(String user) {
         try {
-            //if (user instanceof TravellerModel) {
-                PreparedStatement ps = connection.prepareStatement("DELETE FROM traveller WHERE username = ?");
-                String username = user.getUsername();
-                ps.setString(1, username);
+                String sql = "DELETE FROM traveller \n" + "WHERE Username = ?";
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ps.setString(1, user);
 
                 int rowCount = ps.executeUpdate();
                 if (rowCount == 0) {
-                    System.out.println(WARNING_TAG + " Traveller " + username + " does not exist!");
-                }
-
-                connection.commit();
-
-                ps.close();
-                /*
-            } else {
-                PreparedStatement ps = connection.prepareStatement("DELETE FROM business WHERE username = ?");
-                String username = user.getUsername();
-                ps.setString(1, username);
-
-                int rowCount = ps.executeUpdate();
-                if (rowCount == 0) {
-                    System.out.println(WARNING_TAG + " Business " + username + " does not exist!");
+                    System.out.println(WARNING_TAG + " Traveller " + user + " does not exist!");
                 }
 
                 connection.commit();
 
                 ps.close();
 
-
-            }
-
-                 */
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
         }
+    }
+
+    //Viewing all Users table
+    public List<String[]> viewAllUsers() throws SQLException{
+        List<String[]> res = new ArrayList<>();
+        String[] colName = {"Username","Name","Country","Province","City","Gender","Date of Birth"};
+        res.add(colName);
+
+        try {
+            String sql = "SELECT * FROM traveller";
+            PreparedStatement prepState;
+            prepState = connection.prepareStatement(sql);
+            //PreparedStatement stmt = connection.createStatement();
+            //ResultSet rs = stmt.executeQuery("SELECT * FROM traveller_group");
+
+            ResultSet rs = prepState.executeQuery();
+            while (rs.next()) {
+                String[] row = new String[colName.length];
+                row[0] = rs.getString("Username");
+                row[1] = rs.getString("Name");
+                row[2] = rs.getString("Country");
+                row[3] = rs.getString("Province");
+                row[4] = rs.getString("City");
+                row[5] = rs.getString("Gender");
+                row[6] = rs.getString("Date of Birth");
+                res.add(row);
+            }
+        } catch (SQLException e) {
+            rollbackConnection();
+            throw e;
+        }
+        return res;
     }
 
 
@@ -451,20 +461,22 @@ public class NewDatabaseConnectionHandler {
         }
     }
 
-    /*
-    public BusinessModel[] getBusinessInfoBasedOnTitle(String title) {
-        ArrayList<BusinessModel> result = new ArrayList<>();
+    public TravellerModel[] getTravellerInfoBasedOnTitle(String title) {
+        ArrayList<TravellerModel> result = new ArrayList<>();
+
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM business WHERE name = ?");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM traveller WHERE name = ?");
             ps.setString(1,title);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
-                BusinessModel model = new BusinessModel(rs.getString("username"),
+                TravellerModel model = new TravellerModel(rs.getString("username"),
                         rs.getString("name"),
                         rs.getString("country"),
                         rs.getString("province"),
-                        rs.getString("city"));
+                        rs.getString("city"),
+                        rs.getString("gender"),
+                        rs.getString("birthdate"));
                 result.add(model);
             }
 
@@ -475,7 +487,7 @@ public class NewDatabaseConnectionHandler {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
 
-        return result.toArray(new BusinessModel[result.size()]);
+        return result.toArray(new TravellerModel[result.size()]);
     }
 
      */
