@@ -31,9 +31,7 @@ public class MainWindow extends JFrame{
 
     public static void main(String[] args) {
         MainWindow mainWindow = new MainWindow();
-
     }
-
 
 
     public class MenuPane extends JPanel implements ActionListener {
@@ -67,7 +65,6 @@ public class MainWindow extends JFrame{
             allTravellers.addActionListener(this);
             allGroups.addActionListener(this);
             allInterests.addActionListener(this);
-
         }
 
         @Override
@@ -85,11 +82,3 @@ public class MainWindow extends JFrame{
             }
         }
     }
-
-
-
-
-
-
-
-}
