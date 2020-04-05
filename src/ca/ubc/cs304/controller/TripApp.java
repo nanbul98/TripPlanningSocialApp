@@ -1,6 +1,14 @@
 package ca.ubc.cs304.controller;
 
 import ca.ubc.cs304.database.NewDatabaseConnectionHandler;
+import ca.ubc.cs304.delegates.AllGroupsDelegate;
+import ca.ubc.cs304.delegates.AllTravellersDelegate;
+import ca.ubc.cs304.delegates.LoginWindowDelegate;
+import ca.ubc.cs304.delegates.MainWindowDelegate;
+import ca.ubc.cs304.ui.AllGroups;
+import ca.ubc.cs304.ui.AllTravellers;
+import ca.ubc.cs304.ui.LoginWindow;
+import ca.ubc.cs304.ui.MainWindow;
 import ca.ubc.cs304.delegates.*;
 import ca.ubc.cs304.model.TravellerModel;
 import ca.ubc.cs304.ui.*;
@@ -8,14 +16,20 @@ import ca.ubc.cs304.ui.*;
 import java.sql.SQLException;
 import java.util.List;
 
+import java.sql.SQLException;
+import java.util.List;
+
 /**
  * This is the main controller class that will orchestrate everything.
  */
-public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTravellersDelegate, AddNewTravellerWindowDelegate, DeleteExistingTravellerWindowDelegate {
+
+public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTravellersDelegate, AllGroupsDelegate, AddNewTravellerWindowDelegate, DeleteExistingTravellerWindowDelegate {
     private NewDatabaseConnectionHandler dbHandler = null;
     private LoginWindow loginWindow = null;
     private MainWindow mainWindow = null;
     private AllTravellers allTravellers = null;
+    private AllGroups allGroups = null;
+
     private AddNewTravellerWindow addNewTravellerWindow = null;
     private DeleteExistingTravellerWindow deleteExistingTravellerWindow = null;
 
@@ -28,7 +42,7 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         loginWindow = new LoginWindow();
         loginWindow.showFrame(this);
         //login automatically
-//        this.testLogin("ora_yeramko", "a80591878");
+        this.testLogin("ora_yeramko", "a80591878");
     }
 
     /**
@@ -87,10 +101,7 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
      * The TerminalTransaction instance tells us that the user is fine with dropping any existing table
      * called branch and creating a new one for this project to use
      */
-    public void databaseSetup() {
-        dbHandler.databaseSetup();;
 
-    }
 
     /**
      * Main method called at launch time
@@ -107,6 +118,52 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         allTravellers = new AllTravellers();
         allTravellers.showFrame(this);
 
+    }
+
+    public void goToGroupsPage(){
+        mainWindow.dispose();
+        allGroups = new AllGroups();
+        allGroups.showFrame(this);
+
+    }
+
+    @Override
+    public List<String[]> viewAllGroups() throws SQLException {
+        return dbHandler.viewAllGroups();
+
+    }
+
+    @Override
+    public List<String[]> getGroupInfo(String groupTitle) throws SQLException {
+        return dbHandler.getGroupInfo(groupTitle);
+    }
+
+    @Override
+    public int countAllMember(String groupID) throws SQLException {
+        return dbHandler.countAllMember(groupID);
+    }
+
+    @Override
+    public List<String[]> viewAllGroupMembers(String groupID){
+        return dbHandler.viewAllGroupMembers(groupID);
+    }
+
+    @Override
+    public List<String[]> findSuperStar(String groupID) throws SQLException{
+        return dbHandler.findSuperStar(groupID);
+    }
+    @Override
+    public List<String[]> viewGroupTrips(String groupID) throws SQLException{
+        return dbHandler.viewGroupTrips(groupID);
+    }
+    @Override
+    public List<String[]> viewTripActivity(String groupID, String tripID) throws SQLException{
+        return dbHandler.viewTripActivity(groupID, tripID);
+    }
+
+    @Override
+    public List<String[]> findTripWithAllFreeAct() throws SQLException {
+        return dbHandler.findTripWithAllFreeAct();
     }
 
     public void goAddNewTraveller() {
@@ -140,4 +197,5 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         allTravellers = new AllTravellers();
         allTravellers.showFrame(this);
     }
+
 }

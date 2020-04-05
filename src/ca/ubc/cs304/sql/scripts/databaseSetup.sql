@@ -206,6 +206,14 @@ create table trav_grp_trp_activity
         on delete cascade
 );
 
+create view trips_and_activities AS
+(
+    SELECT T.Trip_ID, T.Title, A.Activity_ID
+    FROM trav_grp_trp_activity A, bus_grp_trip T
+    WHERE A.Trip_ID = T.Trip_ID
+
+);
+
 create table bus_grp_trp_activity
 (
     Activity_ID      integer,
@@ -665,15 +673,18 @@ insert into BUS_GRP_TRIP (TRIP_ID, GROUP_ID, MEETING_LOCATION, TITLE, GROUP_LIMI
 values (0005, 22222, 'Vancouver', 'Coffee Buffet', 10, 50, 'CAD', 'Sample a large selection of different coffee-based drinks, including upcoming hits!', '2020-04-30', '2020-04-30');
 
 insert into TRAV_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
-values (999, 0002, 'Santander', 'Sangria Party', 3, 'Meet fellow Caminos', '2020-05-05', NULL);
+values (999, 0002, 'Santander', 'Sangria Party', 0, 'Meet fellow Caminos', '2020-05-05', NULL);
 insert into TRAV_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
-values (888, 0002, 'Barcelona', 'Take a break from walking', 200, 'Barcelona Sightseeing', '2020-05-14', '2020-05-16');
+values (888, 0002, 'Barcelona', 'Take a break from walking', 30, 'Barcelona Sightseeing', '2020-05-14', '2020-05-16');
 insert into TRAV_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
 values (666, 0004, 'Taipei', 'Visit the National Palace Museum', 100, 'NPM has a Permanent collection of nearly 700,000 pieces of ancient Chinese imperial artifacts and artwork.', '2020-05-23', NULL);
 insert into TRAV_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
 values (333, 0003, 'London', 'Visit the British Museum', 0, 'Welcome to the British Museum – discover two million years of human history and culture.', '2020-03-20', '2020-03-20');
 insert into TRAV_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
-values (334, 0003, 'London', 'Tea at the British Museum', 10, 'Enjoy a spot of tea at Oliver''s Tearoom.', '2020-03-20', '2020-03-20');
+values (334, 0003, 'London', 'Abbey Road', 0, 'Visit the famous Abbey Road', '2020-03-20', '2020-03-20');
+insert into TRAV_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
+values (335, 0003, 'London', 'Changing the Guard', 0, 'Special event at the Buckingham Palace', '2020-03-20', '2020-03-20');
+
 
 insert into BUS_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
 values (555, 0005, 'Vancouver', 'Ice cream after yoga', 10, 'Let''s grab ice cream after the workout! Anyone is welcome!', '2020-02-28', NULL);
