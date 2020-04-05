@@ -8,10 +8,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MainWindow extends JFrame{
+public class MainWindow extends JFrame {
 
     // delegate
     private MainWindowDelegate delegate;
+
     public MainWindow() {
         super("Main Window");
     }
@@ -26,7 +27,6 @@ public class MainWindow extends JFrame{
         this.setVisible(true);
 
     }
-
 
 
     public static void main(String[] args) {
@@ -51,40 +51,35 @@ public class MainWindow extends JFrame{
 
             JPanel buttons = new JPanel(new GridBagLayout());
             JButton allTravellers = new JButton("See All Travellers");
-            allTravellers.setActionCommand("action1");
-            buttons.add(allTravellers, gbc);
-
             JButton allGroups = new JButton("See All Groups");
-            buttons.add(allGroups,gbc);
-            allGroups.setActionCommand("action2");
-
-            buttons.add(new JButton("See All Interests"), gbc);
+            JButton allInterests = new JButton("See All Interests");
+            allTravellers.setActionCommand("travellers");
+            allGroups.setActionCommand("groups");
+            allInterests.setActionCommand("interests");
+            buttons.add(allTravellers, gbc);
+            buttons.add(allGroups, gbc);
+            buttons.add(allInterests, gbc);
             gbc.weighty = 1;
             add(buttons, gbc);
 
             allTravellers.addActionListener(this);
             allGroups.addActionListener(this);
-
+            allInterests.addActionListener(this);
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            String actionCommand = ((JButton) e.getSource()).getActionCommand();
-
-            switch (actionCommand) {
-                case "action1": delegate.goToTravellersPage();
-                break;
-                case "action2": delegate.goToGroupsPage();
-                break;
+            switch (e.getActionCommand()) {
+                case "travellers":
+                    delegate.goToTravellersPage();
+                    break;
+                case "groups":
+                    delegate.goToGroupsPage();
+                    break;
+                case "interests":
+                    delegate.goToInterestsPage();
+                    break;
             }
-
-
-
-
         }
-
-
     }
-
-
 }

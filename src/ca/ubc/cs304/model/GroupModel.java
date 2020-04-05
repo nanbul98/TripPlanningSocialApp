@@ -15,18 +15,24 @@ public class GroupModel {
         this.ownerUsername = ownerUsername;
     }
 
-    public int getGroupID() {
-        return groupID;
-    };
+    public int getGroupID() { return groupID; }
     public String getTitle() {
         return title;
-    };
+    }
     public String getDescription() {
         return description;
-    };
+    }
     public String getOwnerUsername() {
         return ownerUsername;
-    };
+    }
 
+    public Object[] toRowData() {
+        return new Object[] {
+                title,
+                description,
+                groupID,
+                ownerUsername
+        };
+    }
 }
 

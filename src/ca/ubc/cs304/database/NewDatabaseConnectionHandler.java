@@ -2,6 +2,7 @@ package ca.ubc.cs304.database;
 
 
 import ca.ubc.cs304.model.GroupModel;
+import ca.ubc.cs304.model.InterestModel;
 import ca.ubc.cs304.model.TravellerModel;
 
 import javax.swing.*;
@@ -239,6 +240,54 @@ public class NewDatabaseConnectionHandler {
 
     }
 
+    public InterestModel[] getAllInterests() {
+        ArrayList<InterestModel> result = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM interest");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                InterestModel model = new InterestModel(rs.getString("name"),
+                        rs.getString("description"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new InterestModel[result.size()]);
+    }
+
+    public GroupModel[] getGroupsBasedOnInterest(String keyword) {
+        ArrayList<GroupModel> result = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT tg.Title, tg.Description, tg.Group_ID, tg.Owner_Username FROM traveller_group tg, trav_group_interests tgi WHERE tgi.Group_ID = tg.Group_ID AND tgi.Interest_Name = ?" +
+                    " UNION " + "SELECT bg.Title, bg.Description, bg.Group_ID, bg.Owner_Username FROM business_group bg, bus_group_interests bgi WHERE bgi.Group_ID = bg.Group_ID AND bgi.Interest_Name = ?");
+            ps.setString(1, keyword);
+            ps.setString(2, keyword);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                GroupModel model = new GroupModel(rs.getInt("group_ID"),
+                        rs.getString("title"),
+                        rs.getString("description"),
+                        rs.getString("owner_username"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+
+        } catch(SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new GroupModel[result.size()]);
+    }
+
     // view all the members in a group
     public List<String[]> viewAllGroupMembers (String groupID) {
         int intGroupID = Integer.parseInt(groupID);
@@ -273,12 +322,12 @@ public class NewDatabaseConnectionHandler {
         return mem;
     }
 
-    /*
+    // FIXME ? (was completely commented out)
     //  find the superstar member
     public List<String[]> findSuperStar (String groupID) throws SQLException {
         int intGroupID = Integer.parseInt(groupID);
         List<String[]> mem = new ArrayList<>();
-        String[] colName = {"Name"};
+/*        String[] colName = {"Name"};
         mem.add(colName);
 
 
@@ -308,10 +357,9 @@ public class NewDatabaseConnectionHandler {
 
         } catch (Exception e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
+        }*/
         return mem;
     }
-    */
 
     // view all trips of a group
     public List<String[]> viewGroupTrips (String groupID) {
@@ -489,35 +537,6 @@ public class NewDatabaseConnectionHandler {
 
         return result.toArray(new TravellerModel[result.size()]);
     }
-    
-
-    public GroupModel[] getGroupsBasedOnInterest(String keyword) {
-        ArrayList<GroupModel> result = new ArrayList<>();
-        try {
-            PreparedStatement ps = connection.prepareStatement("SELECT tg.Title, tg.Description, tg.Group_ID, tg.Owner_Username FROM traveller_group tg, trav_group_interests tgi WHERE tgi.Group_ID = tg.Group_ID AND tgi.Interest_Name LIKE ?" +
-                    "UNION" + "SELECT bg.Title, bg.Description, bg.Group_ID, bg.Owner_Username FROM business_group tg, bus_group_interests bgi WHERE bgi.Group_ID = bg.Group_ID AND bgi.Interest_Name LIKE %" + "?" + "%");
-            ps.setString(1,keyword);
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()) {
-                GroupModel model = new GroupModel(rs.getInt("groupID"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getString("owner_username"));
-                result.add(model);
-            }
-
-            rs.close();
-            ps.close();
-
-        } catch(SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-
-        return result.toArray(new GroupModel[result.size()]);
-    }
-
-
 
     public int getAverageTripActivitiesPerGroup() {
         int result = 0;
