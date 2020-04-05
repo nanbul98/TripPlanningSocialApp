@@ -1,21 +1,23 @@
 package ca.ubc.cs304.controller;
 
 import ca.ubc.cs304.database.NewDatabaseConnectionHandler;
-import ca.ubc.cs304.delegates.AllTravellersDelegate;
-import ca.ubc.cs304.delegates.LoginWindowDelegate;
-import ca.ubc.cs304.delegates.MainWindowDelegate;
-import ca.ubc.cs304.ui.AllTravellers;
-import ca.ubc.cs304.ui.LoginWindow;
-import ca.ubc.cs304.ui.MainWindow;
+import ca.ubc.cs304.delegates.*;
+import ca.ubc.cs304.model.TravellerModel;
+import ca.ubc.cs304.ui.*;
+
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * This is the main controller class that will orchestrate everything.
  */
-public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTravellersDelegate {
+public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTravellersDelegate, AddNewTravellerWindowDelegate, DeleteExistingTravellerWindowDelegate {
     private NewDatabaseConnectionHandler dbHandler = null;
     private LoginWindow loginWindow = null;
     private MainWindow mainWindow = null;
     private AllTravellers allTravellers = null;
+    private AddNewTravellerWindow addNewTravellerWindow = null;
+    private DeleteExistingTravellerWindow deleteExistingTravellerWindow = null;
 
 
     public TripApp() {
@@ -99,11 +101,43 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
     }
 
 
-
+    /* Method goes to Page with All Travellers */
     public void goToTravellersPage() {
         mainWindow.dispose();
         allTravellers = new AllTravellers();
         allTravellers.showFrame(this);
 
+    }
+
+    public void goAddNewTraveller() {
+        allTravellers.dispose();
+        addNewTravellerWindow = new AddNewTravellerWindow();
+        addNewTravellerWindow.showFrame(this);
+    }
+
+    public void goDeleteTraveller() {
+        allTravellers.dispose();
+        deleteExistingTravellerWindow = new DeleteExistingTravellerWindow();
+        deleteExistingTravellerWindow.showFrame(this);
+    }
+
+    @Override
+    public List<String[]> viewAllUsers() throws SQLException {
+        return null;
+    }
+
+
+    public void insertNewTraveller(TravellerModel travellerModel) {
+        dbHandler.insertTraveller(travellerModel);
+        addNewTravellerWindow.dispose();
+        allTravellers = new AllTravellers();
+        allTravellers.showFrame(this);
+    }
+
+    public void deleteTravellerIfExists(String username) {
+        dbHandler.deleteUser(username);
+        deleteExistingTravellerWindow.dispose();
+        allTravellers = new AllTravellers();
+        allTravellers.showFrame(this);
     }
 }

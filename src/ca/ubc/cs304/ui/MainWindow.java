@@ -31,9 +31,7 @@ public class MainWindow extends JFrame{
 
     public static void main(String[] args) {
         MainWindow mainWindow = new MainWindow();
-
     }
-
 
 
     public class MenuPane extends JPanel implements ActionListener {
