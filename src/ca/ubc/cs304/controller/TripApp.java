@@ -191,6 +191,13 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
     }
 
     @Override
+    public void goFromInterestsToMainWindow() {
+        allInterests.dispose();
+        mainWindow = new MainWindow();
+        mainWindow.showFrame(this);
+    }
+
+    @Override
     public List<String[]> viewAllUsers() throws SQLException {
         return dbHandler.viewAllUsers();
     }
