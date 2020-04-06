@@ -46,7 +46,7 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         loginWindow = new LoginWindow();
         loginWindow.showFrame(this);
         // login automatically
-        // this.testLogin("ora_yeramko", "a80591878");
+        //this.testLogin("ora_yeramko", "a80591878");
     }
 
     /**
@@ -131,6 +131,14 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
 
     }
 
+
+    @Override
+    public void goToMainWindowFromGroups() {
+        allGroups.dispose();
+        mainWindow = new MainWindow();
+        mainWindow.showFrame(this);
+    }
+
     @Override
     public List<String[]> viewAllGroups() throws SQLException {
         return dbHandler.viewAllGroups();
@@ -152,11 +160,13 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         return dbHandler.viewAllGroupMembers(groupID);
     }
 
+
     @Override
     public List<String[]> findSuperStar(String groupID) throws SQLException{
         return null;
 //        return dbHandler.findSuperStar(groupID);
     }
+
     @Override
     public List<String[]> viewGroupTrips(String groupID) throws SQLException{
         return dbHandler.viewGroupTrips(groupID);
@@ -167,9 +177,18 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
     }
 
     @Override
-    public List<String[]> findTripWithAllFreeAct() throws SQLException {
-        return dbHandler.findTripWithAllFreeAct();
+    public List<String[]> findGroupWithEveryOne() throws SQLException {
+        return dbHandler.findGroupWithEveryOne();
     }
+    @Override
+    public void updateActivityDescrip(String activityID, String descrip) throws SQLException{
+        dbHandler.updateActivityDescrip(activityID, descrip);
+        allGroups.dispose();
+        allGroups = new AllGroups();
+        allGroups.showFrame(this);
+    }
+
+
 
     public void goAddNewTraveller() {
         allTravellers.dispose();
@@ -189,6 +208,8 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         mainWindow = new MainWindow();
         mainWindow.showFrame(this);
     }
+
+
 
     @Override
     public List<String[]> viewAllUsers() throws SQLException {

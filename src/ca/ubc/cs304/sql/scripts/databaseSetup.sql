@@ -206,13 +206,6 @@ create table trav_grp_trp_activity
         on delete cascade
 );
 
-create view trips_and_activities AS
-(
-    SELECT T.Trip_ID, T.Title, A.Activity_ID
-    FROM trav_grp_trp_activity A, bus_grp_trip T
-    WHERE A.Trip_ID = T.Trip_ID
-
-);
 
 create table bus_grp_trp_activity
 (

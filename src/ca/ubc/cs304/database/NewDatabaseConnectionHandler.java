@@ -354,7 +354,7 @@ public class NewDatabaseConnectionHandler {
         return mem;
     }
 
-    // FIXME ? (was completely commented out)
+
     //  find the superstar member
     public List<String[]> findSuperStar (String groupID) throws SQLException {
         int intGroupID = Integer.parseInt(groupID);
@@ -392,6 +392,7 @@ public class NewDatabaseConnectionHandler {
         }*/
         return mem;
     }
+
 
     // view all trips of a group
     public List<String[]> viewGroupTrips (String groupID) {
@@ -468,19 +469,40 @@ public class NewDatabaseConnectionHandler {
     }
 
     // TODO find all the trips with activities that are ALL free
-    public List<String[]> findTripWithAllFreeAct() throws SQLException{
+    public List<String[]> findGroupWithEveryOne() throws SQLException{
         List<String[]> res = new ArrayList<>();
-        String[] colName = {"Trip_ID"};
+        String[] colName = {"Trip_ID", "Title"};
         res.add(colName);
 
         try {
-            Statement prepState = connection.createStatement();
-            ResultSet rs = prepState.executeQuery("");
+            String dropView = "DROP VIEW trips_and_activities";
+            PreparedStatement prepState = connection.prepareStatement(dropView);
+            prepState.executeQuery();
 
+            String view = "CREATE VIEW trips_and_activities AS (SELECT T.Trip_ID, T.Title FROM trav_grp_trp_activity A, trav_grp_trip T WHERE A.Trip_ID = T.Trip_ID AND A.Activity_Cost=0)";
+            PreparedStatement prepState2 = connection.prepareStatement(view);
+            prepState2.executeQuery();
+
+
+            Statement prepState4 = connection.createStatement();
+            ResultSet rs = prepState4.executeQuery("SELECT * FROM trips_and_activities");
+
+/*
+            Statement prepState4 = connection.createStatement();
+            ResultSet rs = prepState4.executeQuery("Select T.Trip_ID, T.Title " +
+                    "FROM trav_grp_trip T " +
+                    "WHERE NOT EXISTS " +
+                    "(SELECT * FROM trav_grp_trp_activity A " +
+                    "WHERE NOT EXISTS " +
+                    "(SELECT Tg.Trip_ID " +
+                    "FROM trips_and_activities Tg " +
+                    "WHERE T.Trip_ID = Tg.Trip_ID AND " +
+                    "A.Activity_ID = Tg.Activity_ID))");
+*/
             while (rs.next()) {
                 String[] row = new String[colName.length];
                 row[0] = rs.getString("Trip_ID");
-                //row[1] = rs.getString("Title");
+                row[1] = rs.getString("Title");
                 res.add(row);
             }
         } catch (SQLException e) {
@@ -489,7 +511,7 @@ public class NewDatabaseConnectionHandler {
         }
         return res;
     }
-    
+
 
         public List<String[]> searchGroupMember (int groupID, String name) {
         List<String[]> mem = new ArrayList<>();
@@ -519,27 +541,31 @@ public class NewDatabaseConnectionHandler {
     }
 
 
+    // update activity's description
+    public void updateActivityDescrip (String activityID, String descrip) throws SQLException {
+        int intActivityID = Integer.parseInt(activityID);
 
-    public void updateActivity(int id, String description) {
+
+        System.out.println("view trips in activity id: " + intActivityID);
+
         try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE trav_grp_trp_activity SET Description = ? WHERE Activity_ID = ?");
-            ps.setInt(1, id);
-            ps.setString(2, description);
+            String sql = "UPDATE trav_grp_trp_activity SET Description = ? WHERE Activity_ID = ?";
 
-            int rowCount = ps.executeUpdate();
-            if (rowCount == 0) {
-                System.out.println(WARNING_TAG + " Activity " + id + " does not exist!");
-            }
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, descrip);
+            ps.setInt(2, intActivityID);
+            ps.executeUpdate();
 
-            connection.commit();
 
-            ps.close();
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            rollbackConnection();
         }
+
     }
+
+
+
+
 
     public int getAverageTripActivitiesPerGroup() {
         int result = 0;

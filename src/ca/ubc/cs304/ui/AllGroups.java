@@ -31,6 +31,14 @@ public class AllGroups extends JFrame {
         textArea.setEditable(false);
 
 
+        JButton goBackMainWindow = new JButton(new AbstractAction("Back to Main Window") {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                delegate.goToMainWindowFromGroups();
+            }
+        });
+
+
 
         //Creating the MenuBar and adding components
         JButton viewAllGroupsBtn = new JButton("View All Groups");
@@ -157,14 +165,13 @@ public class AllGroups extends JFrame {
             }
         });
 
-        // Find trip with all free activities
-        JButton tripWithFreeActivites = new JButton("Trips with ALL FREE activities");
-        tripWithFreeActivites.addActionListener(new ActionListener() {
+        // TODO find group that all the travellers are part of
+        JButton groupWithEveryone = new JButton("Groups with all traveller");
+        groupWithEveryone.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //String[] res = promptInputSetActivity();
                 try {
-                    List<String[]> group = delegate.findTripWithAllFreeAct();
+                    List<String[]> group = delegate.findGroupWithEveryOne();
                     displayResult(group, scrollPane);
 
                 } catch (Exception e) {
@@ -174,6 +181,26 @@ public class AllGroups extends JFrame {
 
             }
         });
+
+
+        // Update activity's description
+        JButton updateActivityDescrip = new JButton("Modify Activity");
+        updateActivityDescrip.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String[] res = promptInputSetActivityDescrip();
+                try {
+                    delegate.updateActivityDescrip(res[0], res[1]);
+                    //displayResult(group, scrollPane);
+
+                } catch (Exception e) {
+                    //                   displayErrorMsg(e.getMessage());
+                    System.out.println("SQL Exception: " + e.getMessage());
+                }
+
+            }
+        });
+
 
 
         // Create the menu bar
@@ -186,10 +213,12 @@ public class AllGroups extends JFrame {
         menuBar.add(viewAllGroupsBtn);
         menuBar.add(viewGroupDetail);
         menuBar.add(viewGroupMembers);
+        menuBar.add(goBackMainWindow);
         //menuBar.add(findSuperStar);
         menubarBottom.add(viewGroupTrips);
         menubarBottom.add(viewTripActiviy);
-        menubarBottom.add(tripWithFreeActivites);
+        //menubarBottom.add(tripWithFreeActivites);
+        menubarBottom.add(updateActivityDescrip);
 
 
         this.getContentPane().add(BorderLayout.NORTH, menuBar);
@@ -265,6 +294,7 @@ public class AllGroups extends JFrame {
         System.out.println("GRAB SOETHING " + res);
         return res;
     }
+
     private String[] promptInputSetActivity() {
         String[] res = new String[2];
         JTextField groupID = new JTextField(5);
@@ -280,10 +310,35 @@ public class AllGroups extends JFrame {
         myPanel.add(tripID);
 
         int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Which group?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                "Please Insert", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             res[0] = groupID.getText();
             res[1] = tripID.getText();
+        }
+
+        System.out.println("GRAB SOETHING " + res);
+        return res;
+    }
+
+    private String[] promptInputSetActivityDescrip() {
+        String[] res = new String[2];
+        JTextField activityID = new JTextField(5);
+        JTextField description = new JTextField(5);
+
+
+        JPanel myPanel = new JPanel();
+        myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
+        myPanel.add(new JLabel("Activity ID: "));
+        myPanel.add(activityID);
+        myPanel.add(Box.createHorizontalStrut(10)); // a spacer
+        myPanel.add(new JLabel("New Description: "));
+        myPanel.add(description);
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Please insert", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            res[0] = activityID.getText();
+            res[1] = description.getText();
         }
 
         System.out.println("GRAB SOETHING " + res);
