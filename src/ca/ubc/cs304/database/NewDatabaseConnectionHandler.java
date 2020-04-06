@@ -502,6 +502,7 @@ public class NewDatabaseConnectionHandler {
             PreparedStatement prepState;
             prepState = connection.prepareStatement(sql);
             prepState.setString(1, name);
+            prepState.setInt(2, groupID);
             ResultSet rs = prepState.executeQuery();
             while (rs.next()) {
                 String[] row = new String[colName.length];
@@ -541,11 +542,14 @@ public class NewDatabaseConnectionHandler {
         }
     }
 
-    public int getAverageTripActivitiesPerGroup() {
+    public int getAverageTripActivitiesPerGroup(int groupID) {
         int result = 0;
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT AVG(TripActivity.count_activities) AS TotalAverage FROM (SELECT Count(*) AS count_activities FROM trav_grp_trp_activity GROUP BY Trip_ID ) AS TripActivity");
-
+            PreparedStatement ps = connection.prepareStatement("SELECT AVG(TripActivity.count_activities) AS TotalAverage " +
+                    "FROM (SELECT Count(*) AS count_activities FROM trav_grp_trp_activity GROUP BY Trip_ID ) AS TripActivity," +
+                    "trav_grp_trip tgt " +
+                    "WHERE tgt.Group_ID = ?");
+            ps.setInt(1, groupID);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
               result = rs.getInt("TotalAverage");
