@@ -1,6 +1,6 @@
 package ca.ubc.cs304.controller;
 
-import ca.ubc.cs304.database.NewDatabaseConnectionHandler;
+import ca.ubc.cs304.database.DatabaseConnectionHandler;
 import ca.ubc.cs304.delegates.AllGroupsDelegate;
 import ca.ubc.cs304.delegates.AllTravellersDelegate;
 import ca.ubc.cs304.delegates.InterestListWindowDelegate;
@@ -19,14 +19,11 @@ import ca.ubc.cs304.ui.*;
 import java.sql.SQLException;
 import java.util.List;
 
-import java.sql.SQLException;
-import java.util.List;
-
 /**
  * This is the main controller class that will orchestrate everything.
  */
 public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTravellersDelegate, AllGroupsDelegate, InterestListWindowDelegate, AddNewTravellerWindowDelegate, DeleteExistingTravellerWindowDelegate {
-    private NewDatabaseConnectionHandler dbHandler;
+    private DatabaseConnectionHandler dbHandler;
     private LoginWindow loginWindow = null;
     private MainWindow mainWindow = null;
     private AllTravellers allTravellers = null;
@@ -39,7 +36,7 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
 
 
     public TripApp() {
-        dbHandler = new NewDatabaseConnectionHandler();
+        dbHandler = new DatabaseConnectionHandler();
     }
 
     private void start() {
