@@ -83,7 +83,7 @@ public class AllGroups extends JFrame {
                 try {
                     // Shows total num of member in the group
                     int count = delegate.countAllMember(res);
-                    System.out.println("Counted all the members " + count);
+                    // System.out.println("Counted all the members " + count);
                     JPanel myPanel = new JPanel();
                     myPanel.add(new JLabel("Total Num of Group Member: " + count));
 
@@ -116,7 +116,7 @@ public class AllGroups extends JFrame {
                 try {
                     // Shows total num of member in the group
                     double count = delegate.getAverageTripActivities();
-                    System.out.println("Average amount of activities per trip" + count);
+                    // System.out.println("Average amount of activities per trip" + count);
                     JPanel myPanel = new JPanel();
                     myPanel.add(new JLabel("Average amount of activities per trip: " + count + " activities"));
                     scrollPane.setViewportView(myPanel);
@@ -267,7 +267,7 @@ public class AllGroups extends JFrame {
             res = groupTitle.getText();
         }
 
-        System.out.println("GRAB SOETHING " + res);
+        // System.out.println("GRAB SOMETHING " + res);
         return res;
     }
 
@@ -289,7 +289,7 @@ public class AllGroups extends JFrame {
             res = groupID.getText();
         }
 
-        System.out.println("GRAB SOETHING " + res);
+        // System.out.println("GRAB SOMETHING " + res);
         return res;
     }
 
@@ -314,7 +314,7 @@ public class AllGroups extends JFrame {
             res[1] = tripID.getText();
         }
 
-        System.out.println("GRAB SOETHING " + res);
+        // System.out.println("GRAB SOMETHING " + res);
         return res;
     }
 
@@ -339,7 +339,7 @@ public class AllGroups extends JFrame {
             res[1] = description.getText();
         }
 
-        System.out.println("GRAB SOETHING " + res);
+        // System.out.println("GRAB SOMETHING " + res);
         return res;
     }
 
