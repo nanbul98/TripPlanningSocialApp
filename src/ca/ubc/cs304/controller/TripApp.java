@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * This is the main controller class that will orchestrate everything.
  */
-public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTravellersDelegate, AllGroupsDelegate, InterestListWindowDelegate, AddNewTravellerWindowDelegate, DeleteExistingTravellerWindowDelegate {
+public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTravellersDelegate, AllGroupsDelegate, InterestListWindowDelegate, AddNewTravellerWindowDelegate, DeleteExistingTravellerWindowDelegate, ForumPostDelegate {
     private NewDatabaseConnectionHandler dbHandler;
     private LoginWindow loginWindow = null;
     private MainWindow mainWindow = null;
@@ -227,4 +227,8 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         allTravellers.showFrame(this);
     }
 
+    @Override
+    public List<String[]> getForumPosts(boolean postID, boolean title, boolean body, boolean timestamp, boolean author, boolean tripID) {
+        return null;
+    }
 }
