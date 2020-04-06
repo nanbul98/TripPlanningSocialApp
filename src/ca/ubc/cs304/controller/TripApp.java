@@ -171,6 +171,11 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         return dbHandler.findTripWithAllFreeAct();
     }
 
+    @Override
+    public double getAverageTripActivities() throws SQLException {
+        return dbHandler.getAverageTripActivities();
+    }
+
     public void goAddNewTraveller() {
         allTravellers.dispose();
         addNewTravellerWindow = new AddNewTravellerWindow();

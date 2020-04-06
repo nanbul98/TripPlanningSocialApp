@@ -101,6 +101,26 @@ public class AllGroups extends JFrame {
                 }
             }
         });
+        // View Group Members in detail - member count, view in detail
+        JButton viewAvgTripActivities = new JButton("Find out average activities per trip");
+        viewAvgTripActivities.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    // Shows total num of member in the group
+                    double count = delegate.getAverageTripActivities();
+                    System.out.println("Average amount of activities per trip" + count);
+                    JPanel myPanel = new JPanel();
+                    myPanel.add(new JLabel("Average amount of activities per trip: " + count + " activities"));
+                    scrollPane.setViewportView(myPanel);
+
+                } catch (Exception e) {
+                    //displayErrorMsg(e.getMessage());
+//                    System.out.println("SQL Exception: " + e.getMessage());
+                }
+            }
+        });
+
 
         // Find the superstars (member who have will or have been on ALL trips)
         JButton findSuperStar = new JButton("**Find SUPERSTAR**");
@@ -190,6 +210,7 @@ public class AllGroups extends JFrame {
         menubarBottom.add(viewGroupTrips);
         menubarBottom.add(viewTripActiviy);
         menubarBottom.add(tripWithFreeActivites);
+        menubarBottom.add(viewAvgTripActivities);
 
 
         this.getContentPane().add(BorderLayout.NORTH, menuBar);
