@@ -46,7 +46,7 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         loginWindow = new LoginWindow();
         loginWindow.showFrame(this);
         // login automatically
-        //this.testLogin("ora_yeramko", "a80591878");
+        this.testLogin("ora_yeramko", "a80591878");
     }
 
     /**
@@ -160,12 +160,6 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         return dbHandler.viewAllGroupMembers(groupID);
     }
 
-
-    @Override
-    public List<String[]> findSuperStar(String groupID) throws SQLException{
-        return null;
-//        return dbHandler.findSuperStar(groupID);
-    }
 
     @Override
     public List<String[]> viewGroupTrips(String groupID) throws SQLException{

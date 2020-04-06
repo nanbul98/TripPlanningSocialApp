@@ -3,7 +3,6 @@ package ca.ubc.cs304.ui;
 import ca.ubc.cs304.delegates.AllGroupsDelegate;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -110,24 +109,6 @@ public class AllGroups extends JFrame {
             }
         });
 
-        // Find the superstars (member who have will or have been on ALL trips)
-        JButton findSuperStar = new JButton("**Find SUPERSTAR**");
-        findSuperStar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                String res = promptInputSetGroupMember();
-                try {
-                    List<String[]> group = delegate.findSuperStar(res);
-                    displayResult(group, scrollPane);
-
-                } catch (Exception e) {
-                    //                   displayErrorMsg(e.getMessage());
-                    System.out.println("SQL Exception: " + e.getMessage());
-                }
-
-            }
-        });
-
         // View trip's all trips
         JButton viewGroupTrips = new JButton("View Trips");
         viewGroupTrips.addActionListener(new ActionListener() {
@@ -145,7 +126,6 @@ public class AllGroups extends JFrame {
 
             }
         });
-
 
         // View trips's all activity
         JButton viewTripActiviy = new JButton("View Activities");
@@ -165,7 +145,7 @@ public class AllGroups extends JFrame {
             }
         });
 
-        // TODO find group that all the travellers are part of
+        // find group that all the travellers are part of
         JButton groupWithEveryone = new JButton("Groups with all traveller");
         groupWithEveryone.addActionListener(new ActionListener() {
             @Override
@@ -213,11 +193,10 @@ public class AllGroups extends JFrame {
         menuBar.add(viewAllGroupsBtn);
         menuBar.add(viewGroupDetail);
         menuBar.add(viewGroupMembers);
+        menuBar.add(groupWithEveryone);
         menuBar.add(goBackMainWindow);
-        //menuBar.add(findSuperStar);
         menubarBottom.add(viewGroupTrips);
         menubarBottom.add(viewTripActiviy);
-        //menubarBottom.add(tripWithFreeActivites);
         menubarBottom.add(updateActivityDescrip);
 
 
@@ -227,8 +206,6 @@ public class AllGroups extends JFrame {
         this.setVisible(true);
 
     }
-
-
 
     private void displayResult(List<String[]> res, JScrollPane scrollPane) {
         if (res.size() == 0) {
