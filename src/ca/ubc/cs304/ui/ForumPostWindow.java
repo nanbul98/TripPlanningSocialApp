@@ -138,6 +138,7 @@ public class ForumPostWindow extends JFrame {
             menuBar.add(timePostedBox);
             menuBar.add(authorBox);
             menuBar.add(tripIDBox);
+            menuBar.add(submit);
             menuBar.add(goBackMainWindow);
 
             this.getContentPane().add(BorderLayout.NORTH, menuBar);
