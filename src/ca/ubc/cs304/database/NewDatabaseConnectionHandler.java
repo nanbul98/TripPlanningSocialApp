@@ -352,6 +352,7 @@ public class NewDatabaseConnectionHandler {
         return mem;
     }
 
+
     // view groups that have All the members
     public List<String[]> viewGroupWithAllMembers () {
         List<String[]> groups = new ArrayList<>();
@@ -385,46 +386,6 @@ public class NewDatabaseConnectionHandler {
         return groups;
     }
 
-
-
-    // FIXME ? (was completely commented out)
-    //  find the superstar member
-    public List<String[]> findSuperStar (String groupID) throws SQLException {
-        int intGroupID = Integer.parseInt(groupID);
-        List<String[]> mem = new ArrayList<>();
-/*        String[] colName = {"Name"};
-        mem.add(colName);
-
-
-        try {
-
-            String dropView = "DROP VIEW trips_from_specific_group";
-
-            String view = "CREATE VIEW trips_from_specific_group AS\n" +
-                    "SELECT * FROM trav_grp_trip WHERE group_ID = '" + intGroupID + "\'";
-
-
-            String sql = "SELECT U.name FROM traveller U WHERE NOT exists\n" +
-                    "(SELECT * from trips_from_specific_group T where not exists\n" +
-                    "(SELECT G.username FROM trav_group_member_travellers G WHERE U.username = G.username AND T.Group_ID  = G.Group_ID))";
-
-
-            PreparedStatement prepState2 = connection.prepareStatement(view);
-            //prepState2.executeQuery();
-            PreparedStatement prepState = connection.prepareStatement(sql);
-            System.out.println("find superstar members in group " + intGroupID);
-            ResultSet rs = prepState.executeQuery();
-            while (rs.next()) {
-                String[] row = new String[colName.length];
-                row[0] = rs.getString("Name");
-                mem.add(row);
-            }
-
-        } catch (Exception e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }*/
-        return mem;
-    }
 
     // view all trips of a group
     public List<String[]> viewGroupTrips (String groupID) {
@@ -463,7 +424,7 @@ public class NewDatabaseConnectionHandler {
         return mem;
     }
 
-    // TODO view all activities of group
+    // view all activities of group
     public List<String[]> viewTripActivity (String groupID, String tripID) {
         int intGroupID = Integer.parseInt(groupID);
         int intTripID = Integer.parseInt(tripID);
@@ -500,20 +461,28 @@ public class NewDatabaseConnectionHandler {
         return mem;
     }
 
-    // TODO find all the trips with activities that are ALL free
-    public List<String[]> findTripWithAllFreeAct() throws SQLException{
+    // find groups that all the travellers are part of
+    public List<String[]> findGroupWithEveryOne() throws SQLException{
         List<String[]> res = new ArrayList<>();
-        String[] colName = {"Trip_ID"};
+        String[] colName = {"GROUP_ID", "title","Description"};
         res.add(colName);
 
         try {
-            Statement prepState = connection.createStatement();
-            ResultSet rs = prepState.executeQuery("");
+            Statement s  = connection.createStatement();
+            ResultSet rs = s.executeQuery("SELECT Tg.Group_ID, Tg.Title, Tg.Description " +
+                    "FROM traveller_group tg " +
+                    "WHERE NOT EXISTS " +
+                    "((SELECT T.Username FROM traveller T) " +
+                    "MINUS " +
+                    "(SELECT Tgm.Username " +
+                    "FROM trav_group_member_travellers Tgm " +
+                    "WHERE Tgm.Group_ID = Tg.Group_ID))");
 
             while (rs.next()) {
                 String[] row = new String[colName.length];
-                row[0] = rs.getString("Trip_ID");
-                //row[1] = rs.getString("Title");
+                row[0] = rs.getString("GROUP_ID");
+                row[1] = rs.getString("title");
+                row[2] = rs.getString("Description");
                 res.add(row);
             }
         } catch (SQLException e) {
@@ -522,7 +491,7 @@ public class NewDatabaseConnectionHandler {
         }
         return res;
     }
-    
+
 
     public List<String[]> searchGroupMember (int groupID, String name) {
         List<String[]> mem = new ArrayList<>();
@@ -553,27 +522,28 @@ public class NewDatabaseConnectionHandler {
     }
 
 
+    // update activity's description
+    public void updateActivityDescrip (String activityID, String descrip) throws SQLException {
+        int intActivityID = Integer.parseInt(activityID);
 
-    public void updateActivity(int id, String description) {
+
+        System.out.println("view trips in activity id: " + intActivityID);
+
         try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE trav_grp_trp_activity SET Description = ? WHERE Activity_ID = ?");
-            ps.setInt(1, id);
-            ps.setString(2, description);
+            String sql = "UPDATE trav_grp_trp_activity SET Description = ? WHERE Activity_ID = ?";
 
-            int rowCount = ps.executeUpdate();
-            if (rowCount == 0) {
-                System.out.println(WARNING_TAG + " Activity " + id + " does not exist!");
-            }
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, descrip);
+            ps.setInt(2, intActivityID);
+            ps.executeUpdate();
 
-            connection.commit();
 
-            ps.close();
-
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            rollbackConnection();
         }
+
     }
+
 
     public double getAverageTripActivities() {
         double result = 0;

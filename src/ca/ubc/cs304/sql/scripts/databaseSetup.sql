@@ -206,13 +206,6 @@ create table trav_grp_trp_activity
         on delete cascade
 );
 
-create view trips_and_activities AS
-(
-    SELECT T.Trip_ID, T.Title, A.Activity_ID
-    FROM trav_grp_trp_activity A, bus_grp_trip T
-    WHERE A.Trip_ID = T.Trip_ID
-
-);
 
 create table bus_grp_trp_activity
 (
@@ -558,6 +551,8 @@ insert into TRAVELLER_GROUP (GROUP_ID, TITLE, DESCRIPTION, OWNER_USERNAME)
 values (26264, 'Foodies On Board', 'Asian cuisine lovers', 'erdistro');
 insert into TRAVELLER_GROUP (GROUP_ID, TITLE, DESCRIPTION, OWNER_USERNAME)
 values (12345, 'Developers who need friends', 'Developers who need friends', 'meme009');
+insert into TRAVELLER_GROUP (GROUP_ID, TITLE, DESCRIPTION, OWNER_USERNAME)
+values (7777, 'Backpacking BC', 'We travel across BC', 'meme009');
 
 insert into BUSINESS_GROUP (GROUP_ID, TITLE, DESCRIPTION, OWNER_USERNAME)
 values (11111, 'City', 'City lovers travelling around the world', 'skyyscanner08');
@@ -603,8 +598,21 @@ values (26264, 'ucivermi32');
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
 values (26264, 'weaselyy7');
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
-values (12345, 'oberberi');
+<<<<<<< HEAD
+values (7777, 'letorysi');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (7777, 'ucivermi32');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (7777, 'oberberi');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (7777, 'weaselyy7');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (7777, 'erdistro');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (7777, 'meme009');
 
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (12345, 'oberberi');
 insert into TRAV_GROUP_MEMBER_BUSINESSES (GROUP_ID, USERNAME)
 values (84737, 'love0totsravel');
 insert into TRAV_GROUP_MEMBER_BUSINESSES (GROUP_ID, USERNAME)

@@ -3,7 +3,6 @@ package ca.ubc.cs304.ui;
 import ca.ubc.cs304.delegates.AllGroupsDelegate;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +28,14 @@ public class AllGroups extends JFrame {
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         textArea.setEditable(false);
+
+
+        JButton goBackMainWindow = new JButton(new AbstractAction("Back to Main Window") {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                delegate.goToMainWindowFromGroups();
+            }
+        });
 
 
 
@@ -122,24 +129,6 @@ public class AllGroups extends JFrame {
         });
 
 
-        // Find the superstars (member who have will or have been on ALL trips)
-        JButton findSuperStar = new JButton("**Find SUPERSTAR**");
-        findSuperStar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                String res = promptInputSetGroupMember();
-                try {
-                    List<String[]> group = delegate.findSuperStar(res);
-                    displayResult(group, scrollPane);
-
-                } catch (Exception e) {
-                    //                   displayErrorMsg(e.getMessage());
-                    System.out.println("SQL Exception: " + e.getMessage());
-                }
-
-            }
-        });
-
         // View trip's all trips
         JButton viewGroupTrips = new JButton("View Trips");
         viewGroupTrips.addActionListener(new ActionListener() {
@@ -157,7 +146,6 @@ public class AllGroups extends JFrame {
 
             }
         });
-
 
         // View trips's all activity
         JButton viewTripActiviy = new JButton("View Activities");
@@ -177,14 +165,13 @@ public class AllGroups extends JFrame {
             }
         });
 
-        // Find trip with all free activities
-        JButton tripWithFreeActivites = new JButton("Trips with ALL FREE activities");
-        tripWithFreeActivites.addActionListener(new ActionListener() {
+        // find group that all the travellers are part of
+        JButton groupWithEveryone = new JButton("Groups with all traveller");
+        groupWithEveryone.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //String[] res = promptInputSetActivity();
                 try {
-                    List<String[]> group = delegate.findTripWithAllFreeAct();
+                    List<String[]> group = delegate.findGroupWithEveryOne();
                     displayResult(group, scrollPane);
 
                 } catch (Exception e) {
@@ -194,6 +181,26 @@ public class AllGroups extends JFrame {
 
             }
         });
+
+
+        // Update activity's description
+        JButton updateActivityDescrip = new JButton("Modify Activity");
+        updateActivityDescrip.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String[] res = promptInputSetActivityDescrip();
+                try {
+                    delegate.updateActivityDescrip(res[0], res[1]);
+                    //displayResult(group, scrollPane);
+
+                } catch (Exception e) {
+                    //                   displayErrorMsg(e.getMessage());
+                    System.out.println("SQL Exception: " + e.getMessage());
+                }
+
+            }
+        });
+
 
 
         // Create the menu bar
@@ -206,10 +213,11 @@ public class AllGroups extends JFrame {
         menuBar.add(viewAllGroupsBtn);
         menuBar.add(viewGroupDetail);
         menuBar.add(viewGroupMembers);
-        //menuBar.add(findSuperStar);
+        menuBar.add(groupWithEveryone);
+        menuBar.add(goBackMainWindow);
         menubarBottom.add(viewGroupTrips);
         menubarBottom.add(viewTripActiviy);
-        menubarBottom.add(tripWithFreeActivites);
+        menubarBottom.add(updateActivityDescrip);
         menubarBottom.add(viewAvgTripActivities);
 
 
@@ -219,8 +227,6 @@ public class AllGroups extends JFrame {
         this.setVisible(true);
 
     }
-
-
 
     private void displayResult(List<String[]> res, JScrollPane scrollPane) {
         if (res.size() == 0) {
@@ -286,6 +292,7 @@ public class AllGroups extends JFrame {
         System.out.println("GRAB SOETHING " + res);
         return res;
     }
+
     private String[] promptInputSetActivity() {
         String[] res = new String[2];
         JTextField groupID = new JTextField(5);
@@ -301,10 +308,35 @@ public class AllGroups extends JFrame {
         myPanel.add(tripID);
 
         int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Which group?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                "Please Insert", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             res[0] = groupID.getText();
             res[1] = tripID.getText();
+        }
+
+        System.out.println("GRAB SOETHING " + res);
+        return res;
+    }
+
+    private String[] promptInputSetActivityDescrip() {
+        String[] res = new String[2];
+        JTextField activityID = new JTextField(5);
+        JTextField description = new JTextField(5);
+
+
+        JPanel myPanel = new JPanel();
+        myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
+        myPanel.add(new JLabel("Activity ID: "));
+        myPanel.add(activityID);
+        myPanel.add(Box.createHorizontalStrut(10)); // a spacer
+        myPanel.add(new JLabel("New Description: "));
+        myPanel.add(description);
+
+        int result = JOptionPane.showConfirmDialog(null, myPanel,
+                "Please insert", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            res[0] = activityID.getText();
+            res[1] = description.getText();
         }
 
         System.out.println("GRAB SOETHING " + res);
