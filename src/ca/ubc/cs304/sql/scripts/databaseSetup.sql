@@ -571,15 +571,29 @@ insert into BUSINESS_GROUP (GROUP_ID, TITLE, DESCRIPTION, OWNER_USERNAME)
 values (55555, 'Netflix travellers', 'Netflix fans who like to go to film locations', 'gatosgatods');
 
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
-values (84737, 'meme009');
+values (84737, 'letorysi');
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
-values (85678, 'meme009');
+values (84737, 'oberberi');
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
-values (85678, 'oberberi');
+values (84737, 'weaselyy7');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (84737, 'ucivermi32');
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
 values (84737, 'erdistro');
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
-values (84737, 'oberberi');
+values (84737, 'meme009');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (85678, 'letorysi');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (85678, 'oberberi');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (85678, 'weaselyy7');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (85678, 'ucivermi32');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (85678, 'erdistro');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (85678, 'meme009');
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
 values (00001, 'weaselyy7');
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
@@ -588,6 +602,8 @@ insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
 values (26264, 'ucivermi32');
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
 values (26264, 'weaselyy7');
+insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
+values (12345, 'oberberi');
 
 insert into TRAV_GROUP_MEMBER_BUSINESSES (GROUP_ID, USERNAME)
 values (84737, 'love0totsravel');
@@ -852,7 +868,7 @@ values (4340988, 0005, 'hi!! that''s good to hear', '2020-03-04 01:33:56', 'meme
 
 -- TODO: running out of space below here
 
-insert into BUS_GRP_TRP_BUS_POST_TRAVELLER_COMMENTS (POST_ID, COMMENT_ID, BODY, TIME_COMMENTED, AUTHOR_USERNAME)
+/*insert into BUS_GRP_TRP_BUS_POST_TRAVELLER_COMMENTS (POST_ID, COMMENT_ID, BODY, TIME_COMMENTED, AUTHOR_USERNAME)
 values (5552242, 0001, 'Er...2000? Idk. ¯\_(ツ)_/¯', '2020-01-23 00:20:38', 'meme009');
 insert into BUS_GRP_TRP_BUS_POST_TRAVELLER_COMMENTS (POST_ID, COMMENT_ID, BODY, TIME_COMMENTED, AUTHOR_USERNAME)
 values (5552242, 0002, 'It''s on their website. 1993. But you didn''t hear it from me 😉', '2020-01-23 00:34:11', 'letorysi');
@@ -883,4 +899,4 @@ values (9808098, 0001, 'The Caribbean sounds good this time of year. What do you
 insert into BUS_GRP_TRP_BUS_POST_BUSINESS_COMMENTS (POST_ID, COMMENT_ID, BODY, TIME_COMMENTED, AUTHOR_USERNAME)
 values (5326785, 0001, 'We are!! 😄', '2020-04-29 13:34:19', 'skyyscanner08');
 insert into BUS_GRP_TRP_BUS_POST_BUSINESS_COMMENTS (POST_ID, COMMENT_ID, BODY, TIME_COMMENTED, AUTHOR_USERNAME)
-values (5326785, 0002, 'High five!', '2020-04-29 13:39:35', 'gatosgatods');
+values (5326785, 0002, 'High five!', '2020-04-29 13:39:35', 'gatosgatods');*/
