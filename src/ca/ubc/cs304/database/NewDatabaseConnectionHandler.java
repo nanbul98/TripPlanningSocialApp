@@ -542,14 +542,11 @@ public class NewDatabaseConnectionHandler {
         }
     }
 
-    public int getAverageTripActivitiesPerGroup(int groupID) {
+    public int getAverageTripActivitiesPerGroup() {
         int result = 0;
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT AVG(TripActivity.count_activities) AS TotalAverage " +
-                    "FROM (SELECT Count(*) AS count_activities FROM trav_grp_trp_activity GROUP BY Trip_ID ) AS TripActivity," +
-                    "trav_grp_trip tgt " +
-                    "WHERE tgt.Group_ID = ?");
-            ps.setInt(1, groupID);
+            PreparedStatement ps = connection.prepareStatement("SELECT AVG(TripActivity.count_activities) AS TotalAverage FROM (SELECT Count(*) AS count_activities FROM trav_grp_trp_activity GROUP BY Trip_ID ) AS TripActivity");
+
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
               result = rs.getInt("TotalAverage");
