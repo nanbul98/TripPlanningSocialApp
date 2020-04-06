@@ -575,8 +575,8 @@ public class NewDatabaseConnectionHandler {
         }
     }
 
-    public int getAverageTripActivities() {
-        int result = 0;
+    public double getAverageTripActivities() {
+        double result = 0;
         try {
             String sql = "SELECT AVG(count_activities) as TotalAverage FROM\n" +
                     "(SELECT Count(a.ACTIVITY_ID) AS count_activities\n" +
@@ -587,7 +587,7 @@ public class NewDatabaseConnectionHandler {
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-              result = rs.getInt("TotalAverage");
+              result = rs.getDouble("TotalAverage");
             }
 
             rs.close();

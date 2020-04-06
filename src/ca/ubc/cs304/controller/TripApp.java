@@ -172,7 +172,7 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
     }
 
     @Override
-    public int getAverageTripActivities() throws SQLException {
+    public double getAverageTripActivities() throws SQLException {
         return dbHandler.getAverageTripActivities();
     }
 

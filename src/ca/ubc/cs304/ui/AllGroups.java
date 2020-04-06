@@ -108,7 +108,7 @@ public class AllGroups extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 try {
                     // Shows total num of member in the group
-                    int count = delegate.getAverageTripActivities();
+                    double count = delegate.getAverageTripActivities();
                     System.out.println("Average amount of activities per trip" + count);
                     JPanel myPanel = new JPanel();
                     myPanel.add(new JLabel("Average amount of activities per trip: " + count + " activities"));
