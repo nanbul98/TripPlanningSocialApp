@@ -598,7 +598,6 @@ values (26264, 'ucivermi32');
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
 values (26264, 'weaselyy7');
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
-<<<<<<< HEAD
 values (7777, 'letorysi');
 insert into TRAV_GROUP_MEMBER_TRAVELLERS (GROUP_ID, USERNAME)
 values (7777, 'ucivermi32');
@@ -708,7 +707,6 @@ insert into TRAV_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE
 values (334, 0003, 'London', 'Abbey Road', 0, 'Visit the famous Abbey Road', '2020-03-20', '2020-03-20');
 insert into TRAV_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
 values (335, 0003, 'London', 'Changing the Guard', 0, 'Special event at the Buckingham Palace', '2020-03-20', '2020-03-20');
-
 
 insert into BUS_GRP_TRP_ACTIVITY (ACTIVITY_ID, TRIP_ID, MEETING_LOCATION, TITLE, ACTIVITY_COST, DESCRIPTION, START_DATE, END_DATE)
 values (555, 0005, 'Vancouver', 'Ice cream after yoga', 10, 'Let''s grab ice cream after the workout! Anyone is welcome!', '2020-02-28', NULL);
