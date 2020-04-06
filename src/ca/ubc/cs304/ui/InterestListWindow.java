@@ -46,19 +46,29 @@ public class InterestListWindow extends JFrame implements ActionListener {
         c.anchor = GridBagConstraints.LINE_START;
         ButtonGroup interestButtons = new ButtonGroup();
         for (InterestModel interest : interestList) {
-            JRadioButton interestButton = new JRadioButton(interest.getName() + interest.getDescription());
+            JRadioButton interestButton = new JRadioButton(interest.getName() + ": " + interest.getDescription());
             interestButton.setActionCommand(interest.getName());
             interestButtons.add(interestButton);
             interestButton.addActionListener(this);
             contentPane.add(interestButton, c);
         }
 
+        c.gridwidth = GridBagConstraints.RELATIVE;
         c.gridheight = GridBagConstraints.REMAINDER;
         c.anchor = GridBagConstraints.PAGE_END;
         JButton searchButton = new JButton("Search");
         searchButton.setActionCommand("search");
         searchButton.addActionListener(this);
         contentPane.add(searchButton, c);
+
+        c.gridwidth = GridBagConstraints.REMAINDER;
+        JButton goBackMainWindow = new JButton(new AbstractAction("Back to Main Window") {
+            @Override
+            public void actionPerformed( ActionEvent e ) {
+                delegate.goFromInterestsToMainWindow();
+            }
+        });
+        contentPane.add(goBackMainWindow, c);
 
         this.pack();
         this.setLocationRelativeTo(null);
