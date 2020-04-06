@@ -12,6 +12,7 @@ public interface AllGroupsDelegate {
     public List<String[]> viewGroupTrips(String groupID) throws SQLException;
     public List<String[]> viewTripActivity(String groupID, String tripID) throws SQLException;
     public List<String[]> findTripWithAllFreeAct() throws SQLException;
+    public int getAverageTripActivities() throws SQLException;
 
 
 }
