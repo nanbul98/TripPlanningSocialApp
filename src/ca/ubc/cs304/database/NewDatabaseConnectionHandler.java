@@ -600,6 +600,44 @@ public class NewDatabaseConnectionHandler {
         return result;
     }
 
+    public List<String[]> getForumPosts (String tripID, String[] conditions) {
+        int intTripID = Integer.parseInt(tripID);
+        List<String[]> mem = new ArrayList<>();
+        String columns = "";
+        try {
+            if (conditions.length == 0) {
+                columns = "*";
+            } else {
+                for (int i = 0; i < conditions.length; i++) {
+                    if (i == conditions.length-1) {
+                        columns.concat(conditions[i]);
+                    } else {
+                        columns.concat(conditions[i] + ", ");
+                    }
+                }
+            }
+
+            String sql = "SELECT " + columns + " FROM trav_grp_trp_traveller_forum_posts";
+            PreparedStatement prepState;
+            prepState = connection.prepareStatement(sql);
+            prepState.setString(1, columns);
+            ResultSet rs = prepState.executeQuery();
+            while (rs.next()) {
+                String[] row = new String[conditions.length];
+                for(int i = 0; i < row.length; i++) {
+                    row[i] = rs.getString(conditions[i]);
+                }
+                mem.add(row);
+            }
+
+        } catch (Exception e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return mem;
+    }
+
+
+
 
 
 }

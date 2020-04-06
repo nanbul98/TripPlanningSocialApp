@@ -113,7 +113,7 @@ public class ForumPostWindow extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     try {
-                        List<String[]> res = delegate.getForumPosts(postIDBoxSelected, titleBoxSelected, bodyBoxSelected, timePostedBoxSelected, authorBoxSelected, tripIDBoxSelected);
+                        List<String[]> res = delegate.getForumPosts(postIDBoxSelected, titleBoxSelected, bodyBoxSelected, timePostedBoxSelected, authorBoxSelected, tripIDBoxSelected, tripIDField.getText());
                         displayResult(res, scrollPane);
 
                     } catch (Exception e) {
