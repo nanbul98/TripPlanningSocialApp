@@ -46,7 +46,7 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         loginWindow = new LoginWindow();
         loginWindow.showFrame(this);
         // login automatically
-        this.testLogin("ora_yeramko", "a80591878");
+        // this.testLogin("ora_yeramko", "a80591878");
     }
 
     /**
