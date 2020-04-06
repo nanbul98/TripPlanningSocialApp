@@ -182,7 +182,10 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         allGroups.showFrame(this);
     }
 
-
+    @Override
+    public double getAverageTripActivities() throws SQLException {
+        return dbHandler.getAverageTripActivities();
+    }
 
     public void goAddNewTraveller() {
         allTravellers.dispose();
@@ -204,6 +207,13 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
     }
 
 
+
+    @Override
+    public void goFromInterestsToMainWindow() {
+        allInterests.dispose();
+        mainWindow = new MainWindow();
+        mainWindow.showFrame(this);
+    }
 
     @Override
     public List<String[]> viewAllUsers() throws SQLException {

@@ -7,4 +7,5 @@ public interface InterestListWindowDelegate {
     InterestModel[] getAllInterests();
     GroupModel[] findGroupsWithInterest(String interestName);
     void goToInterestGroupsPage(GroupModel[] groupResults);
+    void goFromInterestsToMainWindow();
 }

@@ -13,6 +13,7 @@ public interface AllGroupsDelegate {
     public List<String[]> viewTripActivity(String groupID, String tripID) throws SQLException;
     public List<String[]> findGroupWithEveryOne() throws SQLException;
     public void updateActivityDescrip(String activityID, String descrip) throws SQLException;
+    public double getAverageTripActivities() throws SQLException;
 
 
 }

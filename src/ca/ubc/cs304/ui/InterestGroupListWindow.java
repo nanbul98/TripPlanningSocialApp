@@ -29,10 +29,11 @@ public class InterestGroupListWindow extends JFrame {
         contentPane.setLayout(gb);
         contentPane.setBorder(BorderFactory.createEmptyBorder(300, 300, 300, 300));
 
+        c.gridheight = GridBagConstraints.RELATIVE;
         c.gridwidth = GridBagConstraints.REMAINDER;
         c.anchor = GridBagConstraints.PAGE_START;
 
-        JLabel title = new JLabel("<html><h1><strong>Groups matching Interest</strong></h1></title>");
+        JLabel title = new JLabel("<html><h1><strong>Groups matching your chosen interest</strong></h1></title>");
         contentPane.add(title, c);
 
         c.gridheight = GridBagConstraints.REMAINDER;
@@ -50,8 +51,11 @@ public class InterestGroupListWindow extends JFrame {
             tableModel.insertRow(i, groupResults[i].toRowData());
         }
 
-        contentPane.add(new JScrollPane(resultTable), c);
+        JScrollPane scrollPane = new JScrollPane(resultTable);
+        scrollPane.setPreferredSize(new Dimension(700, 350));
+        contentPane.add(scrollPane);
         resultTable.setPreferredScrollableViewportSize(resultTable.getPreferredSize());
+        resultTable.setFillsViewportHeight(true);
 
         this.pack();
         this.setLocationRelativeTo(null);
