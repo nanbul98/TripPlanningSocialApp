@@ -33,6 +33,7 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
     private AllGroups allGroups = null;
     private InterestListWindow allInterests = null;
     private InterestGroupListWindow interestGroups = null;
+    private ForumPostWindow forumPostWindow = null;
 
     private AddNewTravellerWindow addNewTravellerWindow = null;
     private DeleteExistingTravellerWindow deleteExistingTravellerWindow = null;
@@ -107,6 +108,13 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         mainWindow.dispose();
         allInterests = new InterestListWindow();
         allInterests.showFrame(this);
+    }
+
+    @Override
+    public void goToForumPostsPage() {
+        mainWindow.dispose();
+        forumPostWindow = new ForumPostWindow();
+        forumPostWindow.showFrame(this);
     }
 
     public void goToInterestGroupsPage(GroupModel[] groupResults) {
@@ -250,4 +258,12 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
         }
         return dbHandler.getForumPosts(tripIDNum, columns);
     }
+
+    @Override
+    public void goFromPostsToMainWindow() {
+        forumPostWindow.dispose();
+        mainWindow = new MainWindow();
+        mainWindow.showFrame(this);
+    }
+
 }

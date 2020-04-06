@@ -4,4 +4,6 @@ public interface MainWindowDelegate {
     void goToTravellersPage();
     void goToGroupsPage();
     void goToInterestsPage();
+
+    void goToForumPostsPage();
 }

@@ -4,4 +4,5 @@ import java.util.List;
 
 public interface ForumPostDelegate {
     public List<String[]> getForumPosts(boolean postID, boolean title, boolean body, boolean timestamp, boolean author, boolean tripID, String tripIDNum);
+    void goFromPostsToMainWindow();
 }

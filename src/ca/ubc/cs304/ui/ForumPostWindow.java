@@ -122,6 +122,12 @@ public class ForumPostWindow extends JFrame {
                     }
                 }
             });
+            JButton goBackMainWindow = new JButton(new AbstractAction("Back to Main Window") {
+                @Override
+                public void actionPerformed( ActionEvent e ) {
+                    delegate.goFromPostsToMainWindow();
+                }
+            });
 
             JMenuBar menuBar = new JMenuBar();
             menuBar.add(enterTripID);
@@ -132,6 +138,7 @@ public class ForumPostWindow extends JFrame {
             menuBar.add(timePostedBox);
             menuBar.add(authorBox);
             menuBar.add(tripIDBox);
+            menuBar.add(goBackMainWindow);
 
             this.getContentPane().add(BorderLayout.NORTH, menuBar);
             this.getContentPane().add(BorderLayout.CENTER, scrollPane);

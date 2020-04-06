@@ -53,18 +53,22 @@ public class MainWindow extends JFrame {
             JButton allTravellers = new JButton("See All Travellers");
             JButton allGroups = new JButton("See All Groups");
             JButton allInterests = new JButton("See All Interests");
+            JButton forumPosts = new JButton("See Forum Posts");
             allTravellers.setActionCommand("travellers");
             allGroups.setActionCommand("groups");
             allInterests.setActionCommand("interests");
+            forumPosts.setActionCommand("forumPosts");
             buttons.add(allTravellers, gbc);
             buttons.add(allGroups, gbc);
             buttons.add(allInterests, gbc);
+            buttons.add(forumPosts, gbc);
             gbc.weighty = 1;
             add(buttons, gbc);
 
             allTravellers.addActionListener(this);
             allGroups.addActionListener(this);
             allInterests.addActionListener(this);
+            forumPosts.addActionListener(this);
         }
 
         @Override
@@ -78,6 +82,9 @@ public class MainWindow extends JFrame {
                     break;
                 case "interests":
                     delegate.goToInterestsPage();
+                    break;
+                case "forumPosts":
+                    delegate.goToForumPostsPage();
                     break;
             }
         }
