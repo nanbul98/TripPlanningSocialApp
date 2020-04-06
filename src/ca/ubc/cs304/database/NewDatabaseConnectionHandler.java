@@ -296,10 +296,8 @@ public class NewDatabaseConnectionHandler {
     public GroupModel[] getGroupsBasedOnInterest(String keyword) {
         ArrayList<GroupModel> result = new ArrayList<>();
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT tg.Title, tg.Description, tg.Group_ID, tg.Owner_Username FROM traveller_group tg, trav_group_interests tgi WHERE tgi.Group_ID = tg.Group_ID AND tgi.Interest_Name = ?" +
-                    " UNION " + "SELECT bg.Title, bg.Description, bg.Group_ID, bg.Owner_Username FROM business_group bg, bus_group_interests bgi WHERE bgi.Group_ID = bg.Group_ID AND bgi.Interest_Name = ?");
+            PreparedStatement ps = connection.prepareStatement("SELECT tg.Title, tg.Description, tg.Group_ID, tg.Owner_Username FROM traveller_group tg, trav_group_interests tgi WHERE tgi.Group_ID = tg.Group_ID AND tgi.Interest_Name = ?");
             ps.setString(1, keyword);
-            ps.setString(2, keyword);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -353,6 +351,41 @@ public class NewDatabaseConnectionHandler {
         }
         return mem;
     }
+
+    // view groups that have All the members
+    public List<String[]> viewGroupWithAllMembers () {
+        List<String[]> groups = new ArrayList<>();
+        String[] colName = {"Group_ID","Title"};
+        groups.add(colName);
+
+
+        try {
+            String sql = "SELECT tg.Group_ID, tg.Title\n" +
+                    "FROM traveller_group tg\n" +
+                    "WHERE NOT EXISTS\n" +
+                    "((Select t.Username from traveller t)\n" +
+                    "MINUS\n" +
+                    "(SELECT tgm.Username\n" +
+                    "FROM trav_group_member_travellers tgm\n" +
+                    "WHERE tgm.Group_ID = tg.Group_ID));";
+
+            PreparedStatement prepState;
+            prepState = connection.prepareStatement(sql);
+            ResultSet rs = prepState.executeQuery();
+            while (rs.next()) {
+                String[] row = new String[colName.length];
+                row[0] = rs.getString("Group_ID");
+                row[1] = rs.getString("Title");
+                groups.add(row);
+            }
+
+        } catch (Exception e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return groups;
+    }
+
+
 
     // FIXME ? (was completely commented out)
     //  find the superstar member
