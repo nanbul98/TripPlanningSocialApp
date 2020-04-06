@@ -616,7 +616,6 @@ public class NewDatabaseConnectionHandler {
             String sql = "SELECT " + columns + " FROM trav_grp_trp_traveller_forum_posts";
             PreparedStatement prepState;
             prepState = connection.prepareStatement(sql);
-            prepState.setString(2, columns);
             ResultSet rs = prepState.executeQuery();
             while (rs.next()) {
                 String[] row = new String[conditions.size()];
