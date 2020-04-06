@@ -491,7 +491,7 @@ public class NewDatabaseConnectionHandler {
     }
     
 
-        public List<String[]> searchGroupMember (int groupID, String name) {
+    public List<String[]> searchGroupMember (int groupID, String name) {
         List<String[]> mem = new ArrayList<>();
         String[] colName = {"Username", "Name", "Location", "Gender", "Birthdate"};
         mem.add(colName);
