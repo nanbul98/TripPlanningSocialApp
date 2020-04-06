@@ -17,6 +17,7 @@ import ca.ubc.cs304.model.InterestModel;
 import ca.ubc.cs304.ui.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.sql.SQLException;
@@ -237,24 +238,24 @@ public class TripApp implements LoginWindowDelegate, MainWindowDelegate, AllTrav
 
     @Override
     public List<String[]> getForumPosts(boolean postID, boolean title, boolean body, boolean timestamp, boolean author, boolean tripID, String tripIDNum) {
-        String[] columns = new String[6];
+        List<String> columns = new ArrayList<>();
         if (postID == true) {
-            columns[0] = "Post_ID";
+            columns.add("Post_ID");
         }
         if (title == true) {
-            columns[1] = "Title";
+            columns.add("Title");
         }
         if (body == true) {
-            columns[2] = "Body";
+            columns.add("Body");
         }
         if (timestamp == true) {
-            columns[3] = "Time_Posted";
+            columns.add("Time_Posted");
         }
         if (author == true) {
-            columns[4] = "Author_Username";
+            columns.add("Author_Username");
         }
         if (tripID == true) {
-            columns[5] = "Trip_ID";
+            columns.add("Trip_ID");
         }
         return dbHandler.getForumPosts(tripIDNum, columns);
     }

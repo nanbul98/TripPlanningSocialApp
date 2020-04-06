@@ -600,32 +600,30 @@ public class NewDatabaseConnectionHandler {
         return result;
     }
 
-    public List<String[]> getForumPosts (String tripID, String[] conditions) {
-        int intTripID = Integer.parseInt(tripID);
+    public List<String[]> getForumPosts (String tripID, List<String>  conditions) {
+//        int intTripID = Integer.parseInt(tripID);
         List<String[]> mem = new ArrayList<>();
         String columns = "";
         try {
-            if (conditions.length == 0) {
+            if (conditions.size() == 0) {
                 columns = "*";
             } else {
-                for (int i = 0; i < conditions.length; i++) {
-                    if (i == conditions.length-1) {
-                        columns.concat(conditions[i]);
-                    } else {
-                        columns.concat(conditions[i] + ", ");
-                    }
+                for (String condition: conditions) {
+                    columns.concat(condition + ",");
                 }
             }
-
+            System.out.println(columns);
             String sql = "SELECT " + columns + " FROM trav_grp_trp_traveller_forum_posts";
             PreparedStatement prepState;
             prepState = connection.prepareStatement(sql);
-            prepState.setString(1, columns);
+            prepState.setString(2, columns);
             ResultSet rs = prepState.executeQuery();
             while (rs.next()) {
-                String[] row = new String[conditions.length];
-                for(int i = 0; i < row.length; i++) {
-                    row[i] = rs.getString(conditions[i]);
+                String[] row = new String[conditions.size()];
+                int i = 0;
+                for (String condition: conditions) {
+                    row[i] = rs.getString(condition);
+                    i++;
                 }
                 mem.add(row);
             }
